@@ -1,0 +1,9 @@
+DO $$
+BEGIN
+  CREATE TYPE "HabitLogStatus" AS ENUM ('DONE', 'NOT_DONE', 'AVOIDED', 'DID_IT', 'SKIPPED');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+
+ALTER TABLE "HabitLog"
+  ADD COLUMN IF NOT EXISTS "status" "HabitLogStatus" NOT NULL DEFAULT 'SKIPPED';

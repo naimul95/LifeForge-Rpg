@@ -1,0 +1,2 @@
+export const mindRefreshGames = ["memory-match", "reaction-test", "number-challenge", "quick-math", "typing-challenge", "focus-challenge", "daily-challenge"] as const;
+export type MindRefreshGame = typeof mindRefreshGames[number];

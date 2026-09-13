@@ -1,0 +1,2 @@
+export interface AnalyticsPoint { label: string; study: number; xp: number; habits: number; goals: number; quests: number; streak: number; }
+export interface AnalyticsData { daily: AnalyticsPoint[]; weekly: AnalyticsPoint[]; monthly: AnalyticsPoint[]; subjects: { name: string; minutes: number }[]; topics: { name: string; progress: number }[]; weeklyReport: { studyMinutes: number; quests: number; goodHabits: number; badHabits: number; xp: number; bestCategory: string; weakestCategory: string; previousStudyMinutes: number; previousXp: number }; }

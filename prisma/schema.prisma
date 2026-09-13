@@ -1,0 +1,612 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                   String                @id @default(cuid())
+  email                String                @unique
+  displayName          String?
+  avatarUrl            String?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  dailyChallenges      DailyChallenge[]
+  gameScores           GameScore[]
+  goals                Goal[]
+  habits               Habit[]
+  habitLogs            HabitLog[]
+  lifeCoinTransactions LifeCoinTransaction[]
+  materials            Material[]
+  moods                Mood[]
+  notes                Note[]
+  notifications        Notification[]
+  oauthAccounts        OAuthAccount[]
+  profile              Profile?
+  quests               Quest[]
+  questCompletions     QuestCompletion[]
+  reminders            Reminder[]
+  rewardClaims         RewardClaim[]
+  roadmaps             Roadmap[]
+  settings             Settings?
+  sharedMaterials      SharedMaterial[]
+  studyDailyStats      StudyDailyStat[]
+  studySessions        StudySession[]
+  studyTimerState      StudyTimerState?
+  studyWeeklyStats     StudyWeeklyStat[]
+  subjects             Subject[]
+  topics               Topic[]
+  userAchievements     UserAchievement[]
+}
+
+model OAuthAccount {
+  id                String   @id @default(cuid())
+  provider          String
+  providerAccountId String
+  userId            String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Profile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  username       String   @default("")
+  bio            String   @default("")
+  avatarUrl      String?
+  avatarPublicId String?
+  xp             Int      @default(0)
+  coins          Int      @default(0)
+  level          Int      @default(1)
+  intelligence   Int      @default(0)
+  strength       Int      @default(0)
+  health         Int      @default(0)
+  discipline     Int      @default(0)
+  happiness      Int      @default(0)
+  energy         Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Settings {
+  id                   String            @id @default(cuid())
+  userId               String            @unique
+  theme                AppTheme          @default(deep_space)
+  weeklySummary        Boolean           @default(true)
+  browserNotifications Boolean           @default(true)
+  studyGoalMinutes     Int               @default(60)
+  defaultTimerSeconds  Int               @default(1500)
+  timerAutoComplete    Boolean           @default(false)
+  notificationsEnabled Boolean           @default(true)
+  emailReminders       Boolean           @default(false)
+  profileVisibility    ProfileVisibility @default(private)
+  shareLinksEnabled    Boolean           @default(true)
+  analyticsOptIn       Boolean           @default(true)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  user                 User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Subject {
+  id           String         @id @default(cuid())
+  userId       String
+  name         String
+  description  String         @default("")
+  color        String         @default("cyan")
+  pinned       Boolean        @default(false)
+  studyMinutes Float          @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  materials    Material[]
+  notes        Note[]
+  roadmaps     Roadmap[]
+  sessions     StudySession[]
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topics       Topic[]
+
+  @@unique([id, userId])
+  @@index([userId, updatedAt])
+}
+
+model Topic {
+  id               String         @id @default(cuid())
+  userId           String
+  subjectId        String
+  name             String
+  description      String         @default("")
+  subtopics        Json
+  completion       Float          @default(0)
+  completedCount   Int            @default(0)
+  estimatedMinutes Int            @default(0)
+  studyMinutes     Float          @default(0)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  materials        Material[]
+  roadmaps         Roadmap[]
+  sessions         StudySession[]
+  subject          Subject        @relation(fields: [subjectId, userId], references: [id, userId], onDelete: Cascade)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([id, userId])
+  @@index([userId, subjectId, updatedAt])
+}
+
+model Material {
+  id                     String           @id @default(cuid())
+  userId                 String
+  subjectId              String
+  topicId                String
+  kind                   MaterialKind
+  title                  String
+  description            String           @default("")
+  url                    String?
+  content                String?
+  fileKind               VaultFileKind?
+  fileName               String?
+  mimeType               String?
+  sizeBytes              Int?
+  cloudinaryPublicId     String?
+  cloudinaryUrl          String?
+  cloudinaryResourceType String?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+  subject                Subject          @relation(fields: [subjectId, userId], references: [id, userId], onDelete: Cascade)
+  topic                  Topic            @relation(fields: [topicId, userId], references: [id, userId], onDelete: Cascade)
+  user                   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note                   Note?
+  sharedWith             SharedMaterial[]
+
+  @@unique([id, userId])
+  @@index([userId, subjectId, topicId, updatedAt])
+}
+
+model Note {
+  id         String    @id @default(cuid())
+  userId     String
+  subjectId  String?
+  materialId String?   @unique
+  title      String
+  content    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  material   Material? @relation(fields: [materialId], references: [id])
+  subject    Subject?  @relation(fields: [subjectId, userId], references: [id, userId])
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, updatedAt])
+  @@index([userId, subjectId])
+}
+
+model StudySession {
+  id              String   @id @default(cuid())
+  userId          String
+  subjectId       String
+  topicId         String?
+  subjectName     String
+  topicName       String?
+  durationSeconds Int
+  startedAt       DateTime
+  endedAt         DateTime
+  completionKey   String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  subject         Subject  @relation(fields: [subjectId, userId], references: [id, userId], onDelete: Cascade)
+  topic           Topic?   @relation(fields: [topicId, userId], references: [id, userId])
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, endedAt])
+  @@index([userId, subjectId, endedAt])
+}
+
+model StudyTimerState {
+  id                 String           @id @default(cuid())
+  userId             String           @unique
+  subjectId          String?
+  topicId            String?
+  completionKey      String           @unique @default(uuid())
+  presetSeconds      Int              @default(1500)
+  customSeconds      Int?
+  elapsedSeconds     Int              @default(0)
+  accumulatedSeconds Int              @default(0)
+  status             StudyTimerStatus @default(idle)
+  startedAt          DateTime?
+  lastResumedAt      DateTime?
+  pausedAt           DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+model StudyDailyStat {
+  id           String   @id @default(cuid())
+  userId       String
+  dateKey      DateTime @db.Date
+  totalSeconds Int      @default(0)
+  sessionCount Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dateKey])
+  @@index([userId, dateKey])
+}
+
+model StudyWeeklyStat {
+  id           String   @id @default(cuid())
+  userId       String
+  weekKey      DateTime @db.Date
+  totalSeconds Int      @default(0)
+  sessionCount Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekKey])
+  @@index([userId, weekKey])
+}
+
+model Goal {
+  id             String     @id @default(cuid())
+  userId         String
+  title          String
+  description    String     @default("")
+  category       String
+  startDate      DateTime   @db.Date
+  deadline       DateTime   @db.Date
+  dailyTarget    Float      @default(0)
+  weeklyTarget   Float      @default(0)
+  progress       Float      @default(0)
+  remaining      Float      @default(0)
+  status         GoalStatus @default(NOT_STARTED)
+  completionDate DateTime?  @db.Date
+  xpAwarded      Boolean    @default(false)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status, deadline])
+}
+
+model Habit {
+  id           String         @id @default(cuid())
+  userId       String
+  name         String
+  polarity     HabitPolarity
+  color        String         @default("cyan")
+  active       Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  description  String         @default("")
+  endDate      DateTime?      @db.Date
+  frequency    HabitFrequency @default(daily)
+  reminder     String?
+  selectedDays Json           @default("[]")
+  startDate    DateTime       @default(now()) @db.Date
+  target       Int            @default(1)
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs         HabitLog[]
+
+  @@unique([id, userId])
+  @@index([userId, active, createdAt])
+}
+
+model HabitLog {
+  id        String         @id @default(cuid())
+  userId    String
+  habitId   String
+  dateKey   DateTime       @db.Date
+  completed Boolean        @default(false)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  status    HabitLogStatus @default(SKIPPED)
+  habit     Habit          @relation(fields: [habitId, userId], references: [id, userId], onDelete: Cascade)
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, dateKey])
+  @@index([userId, dateKey])
+}
+
+model Quest {
+  id          String           @id @default(cuid())
+  userId      String
+  title       String
+  description String           @default("")
+  period      QuestPeriod
+  difficulty  QuestDifficulty
+  xpReward    Int
+  coinReward  Int
+  completed   Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completions QuestCompletion[]
+
+  @@unique([id, userId])
+  @@index([userId, completed, createdAt])
+}
+
+model QuestCompletion {
+  id          String   @id @default(cuid())
+  userId      String
+  questId     String
+  completedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  quest       Quest    @relation(fields: [questId, userId], references: [id, userId], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([questId, completedAt])
+  @@unique([userId, questId])
+  @@index([userId, completedAt])
+}
+
+model Achievement {
+  id          String            @id @default(cuid())
+  kind        AchievementKind
+  name        String            @unique
+  description String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  userAwards  UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime    @default(now())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId, unlockedAt])
+}
+
+model Reminder {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  description String   @default("")
+  remindAt    DateTime
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completed, remindAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt, createdAt])
+}
+
+model Roadmap {
+  id          String    @id @default(cuid())
+  userId      String
+  subjectId   String?
+  topicId     String?
+  title       String
+  description String    @default("")
+  targetDate  DateTime? @db.Date
+  progress    Float     @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  subject     Subject?  @relation(fields: [subjectId, userId], references: [id, userId])
+  topic       Topic?    @relation(fields: [topicId, userId], references: [id, userId])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, targetDate])
+  @@index([userId, topicId, targetDate])
+}
+
+model Mood {
+  id         String    @id @default(cuid())
+  userId     String
+  mood       MoodLevel
+  note       String    @default("")
+  recordedOn DateTime  @db.Date
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recordedOn])
+  @@index([userId, recordedOn])
+}
+
+model GameScore {
+  id         String   @id @default(cuid())
+  userId     String
+  gameKey    String
+  score      Int
+  achievedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, gameKey, score])
+  @@index([userId, achievedAt])
+}
+
+model DailyChallenge {
+  id            String    @id @default(cuid())
+  userId        String
+  challengeDate DateTime  @db.Date
+  title         String
+  description   String
+  xpReward      Int       @default(0)
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, challengeDate])
+  @@index([userId, completedAt])
+}
+
+model LifeCoinTransaction {
+  id          String   @id @default(cuid())
+  userId      String
+  amount      Int
+  reason      String
+  referenceId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model RewardClaim {
+  id         String   @id @default(cuid())
+  userId     String
+  rewardType String
+  sourceId   String
+  xp         Int      @default(0)
+  coins      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, rewardType, sourceId])
+  @@index([userId, createdAt])
+}
+
+model SharedMaterial {
+  id         String    @id @default(cuid())
+  userId     String
+  materialId String
+  shareToken String    @unique
+  expiresAt  DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  material   Material  @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, materialId])
+  @@index([userId, revokedAt, expiresAt])
+}
+
+enum ProfileTheme {
+  dark
+  system
+}
+
+enum AppTheme {
+  deep_space
+  cyber_neon
+  midnight_galaxy
+  aurora
+  ocean
+  emerald_matrix
+  synthwave
+  crimson_core
+  minimal_frost
+  solar_flare
+}
+
+enum ProfileVisibility {
+  private
+  shared
+}
+
+enum HabitPolarity {
+  good
+  bad
+}
+
+enum HabitFrequency {
+  daily
+  weekly
+  specific_days
+  custom
+}
+
+enum HabitLogStatus {
+  DONE
+  NOT_DONE
+  AVOIDED
+  DID_IT
+  SKIPPED
+}
+
+enum GoalStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum QuestPeriod {
+  daily
+  weekly
+}
+
+enum QuestDifficulty {
+  easy
+  medium
+  hard
+  epic
+}
+
+enum MaterialKind {
+  note
+  video
+  external_link
+  file
+}
+
+enum VaultFileKind {
+  pdf
+  image
+  handwritten_note
+  document
+}
+
+enum AchievementKind {
+  achievement
+  badge
+  title
+}
+
+enum NotificationType {
+  reminder
+  achievement
+  system
+}
+
+enum MoodLevel {
+  very_low
+  low
+  neutral
+  good
+  very_good
+}
+
+enum StudyTimerStatus {
+  idle
+  running
+  paused
+  completed
+}
