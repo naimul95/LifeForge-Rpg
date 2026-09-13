@@ -184,12 +184,12 @@ export async function createUploadedMaterialForUser(userId: string, input: unkno
       cloudinaryResourceType: data.cloudinaryResourceType,
     },
   });
-  revalidatePath("/dashboard/learning-vault");
 }
 
 export async function createUploadedMaterial(input: unknown) {
   const { userId } = await requireSession();
   await createUploadedMaterialForUser(userId, input);
+  revalidatePath("/dashboard/learning-vault");
 }
 
 export async function createRoadmap(input: unknown) {
