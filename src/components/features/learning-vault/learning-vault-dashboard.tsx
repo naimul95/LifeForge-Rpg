@@ -91,6 +91,29 @@ export function LearningVaultDashboard({
     );
   }
 
+  function addMaterialToState(material: VaultMaterialDto, materialTopicId: string) {
+    setSubjects((current) => current.map((item) => ({
+      ...item,
+      topics: item.topics.map((currentTopic) => currentTopic.id === materialTopicId
+        ? { ...currentTopic, materials: [material, ...currentTopic.materials] }
+        : currentTopic),
+    })));
+  }
+
+  async function saveMaterial(task: () => Promise<VaultMaterialDto>, topicId: string) {
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      addMaterialToState(await task(), topicId);
+      setNotice("Material saved.");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "The material could not be saved.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function run(task: () => Promise<void>, success?: string) {
     setBusy(true);
     setError("");
@@ -327,10 +350,7 @@ export function LearningVaultDashboard({
                   )
                 }
                 onMaterial={(input) =>
-                  run(
-                    () => createMaterial({ ...input, topicId: topic.id }),
-                    "Material saved.",
-                  )
+                  saveMaterial(() => createMaterial({ ...input, topicId: topic.id }), topic.id)
                 }
                 onUpload={async (form) => {
                   setBusy(true);
@@ -343,10 +363,13 @@ export function LearningVaultDashboard({
                     });
                     const result = (await response.json()) as {
                       error?: string;
+                      material?: VaultMaterialDto;
                     };
                     if (!response.ok)
                       throw new Error(result.error ?? "Upload failed.");
-                    await refresh();
+                    if (!result.material) throw new Error("Upload completed without material details.");
+                    const topicId = String(form.get("topicId"));
+                    addMaterialToState(result.material, topicId);
                     setNotice("File uploaded.");
                   } catch (caught) {
                     setError(
@@ -742,25 +765,33 @@ function MaterialComposer({
   const [url, setUrl] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (kind === "file") {
-      if (!file) return;
-      const form = new FormData();
-      form.set("topicId", topicId);
-      form.set("title", title || file.name);
-      form.set("description", description);
-      form.set("fileKind", fileKind);
-      form.set("file", file);
-      await onUpload(form);
-    } else
-      await onMaterial({
-        kind,
-        title,
-        description,
-        url: kind === "note" ? undefined : url,
-        content: kind === "note" ? content : undefined,
-      });
+    if (busy || submitting) return;
+    setSubmitting(true);
+    try {
+      if (kind === "file") {
+        if (!file) return;
+        const form = new FormData();
+        form.set("topicId", topicId);
+        form.set("title", title || file.name);
+        form.set("description", description);
+        form.set("fileKind", fileKind);
+        form.set("file", file);
+        await onUpload(form);
+      } else {
+        await onMaterial({
+          kind,
+          title,
+          description,
+          url: kind === "note" ? undefined : url,
+          content: kind === "note" ? content : undefined,
+        });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
   return (
     <form
@@ -829,8 +860,8 @@ function MaterialComposer({
         value={description}
         setValue={setDescription}
       />
-      <button className="primary-button" disabled={busy}>
-        <UploadCloud size={15} /> Save material
+      <button className="primary-button" disabled={busy || submitting}>
+        <UploadCloud size={15} /> {submitting ? (kind === "file" ? "Uploading..." : "Saving...") : "Save material"}
       </button>
     </form>
   );

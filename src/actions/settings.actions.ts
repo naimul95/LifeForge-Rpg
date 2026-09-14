@@ -3,6 +3,7 @@
 import { z } from "zod";
 
 import { prisma } from "@/lib/db";
+import { requireAuthenticatedUser } from "@/lib/auth/authorization";
 import { requireSession } from "@/lib/auth/session";
 import { appThemes, type SettingsData } from "@/types/settings-dashboard";
 
@@ -26,7 +27,7 @@ function settingsDto(user: { displayName: string | null; email: string }, settin
 
 export async function getSettings(): Promise<SettingsData> {
   const { userId } = await requireSession();
-  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { displayName: true, email: true } });
+  const user = await requireAuthenticatedUser();
   const settings = await prisma.settings.upsert({ where: { userId }, update: {}, create: { userId } });
   return settingsDto(user, { theme: settings.theme, weeklySummary: settings.weeklySummary, browserNotifications: settings.browserNotifications, studyGoalMinutes: settings.studyGoalMinutes, defaultTimerSeconds: settings.defaultTimerSeconds, timerAutoComplete: settings.timerAutoComplete, notificationsEnabled: settings.notificationsEnabled, emailReminders: settings.emailReminders, profileVisibility: settings.profileVisibility, shareLinksEnabled: settings.shareLinksEnabled, analyticsOptIn: settings.analyticsOptIn });
 }

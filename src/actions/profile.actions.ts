@@ -3,6 +3,7 @@
 import { z } from "zod";
 
 import { prisma } from "@/lib/db";
+import { redirectToLoginAfterInvalidSession } from "@/lib/auth/authorization";
 import { requireSession } from "@/lib/auth/session";
 import { calculateHabitStreak } from "@/lib/habits/streak";
 import type { ProfileDashboardData } from "@/types/profile-dashboard";
@@ -14,8 +15,25 @@ const profileInput = z.object({
 
 export async function getProfileDashboardData(): Promise<ProfileDashboardData> {
   const { userId } = await requireSession();
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      displayName: true,
+      email: true,
+      profile: {
+        select: {
+          username: true,
+          bio: true,
+          avatarUrl: true,
+          level: true,
+          xp: true,
+        },
+      },
+    },
+  });
+  if (!user) redirectToLoginAfterInvalidSession();
+
   const [
-    user,
     profile,
     habits,
     topics,
@@ -24,23 +42,8 @@ export async function getProfileDashboardData(): Promise<ProfileDashboardData> {
     awards,
     goals,
     quests,
+    totalStudySeconds,
   ] = await Promise.all([
-    prisma.user.findUniqueOrThrow({
-      where: { id: userId },
-      select: {
-        displayName: true,
-        email: true,
-        profile: {
-          select: {
-            username: true,
-            bio: true,
-            avatarUrl: true,
-            level: true,
-            xp: true,
-          },
-        },
-      },
-    }),
     prisma.profile.upsert({
       where: { userId },
       update: {},
@@ -63,11 +66,11 @@ export async function getProfileDashboardData(): Promise<ProfileDashboardData> {
     }),
     prisma.goal.count({ where: { userId, status: "COMPLETED" } }),
     prisma.questCompletion.count({ where: { userId } }),
+    prisma.studySession.aggregate({
+      where: { userId },
+      _sum: { durationSeconds: true },
+    }),
   ]);
-  const totalStudySeconds = await prisma.studySession.aggregate({
-    where: { userId },
-    _sum: { durationSeconds: true },
-  });
   const unlocked = new Set(awards.map((item) => item.achievement.name));
   const streaks = habits.map((habit) =>
     calculateHabitStreak(habit, habit.logs),

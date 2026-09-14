@@ -3,8 +3,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { clearedSessionCookieHeader } from "@/lib/auth/session";
 
 export default function logout(request: NextApiRequest, response: NextApiResponse) {
+  if (request.method === "GET") {
+    response.setHeader("Set-Cookie", clearedSessionCookieHeader());
+    response.redirect(302, "/");
+    return;
+  }
   if (request.method !== "POST") {
-    response.setHeader("Allow", "POST");
+    response.setHeader("Allow", "GET, POST");
     response.status(405).end("Method Not Allowed");
     return;
   }

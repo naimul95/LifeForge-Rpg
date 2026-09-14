@@ -25,6 +25,7 @@ export function Header({ user, activeItem, onSelect, onMenuOpen }: HeaderProps) 
   const [searchError, setSearchError] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [dueReminder, setDueReminder] = useState<{ id: string; title: string; description: string; remindAt: Date } | null>(null);
+  const notifiedReminderIds = useRef<Set<string>>(new Set());
   const searchRequest = useRef(0);
   const searchTimer = useRef<number | null>(null);
   async function signOutUser() { await fetch("/api/auth/logout", { method: "POST" }); router.push("/"); }
@@ -34,12 +35,26 @@ export function Header({ user, activeItem, onSelect, onMenuOpen }: HeaderProps) 
   }, []);
 
   useEffect(() => {
+    const storageKey = `lifeforge-notified-reminders:${user.email}`;
+    try {
+      const stored = window.localStorage.getItem(storageKey);
+      if (stored) notifiedReminderIds.current = new Set(JSON.parse(stored) as string[]);
+    } catch { /* Browser storage may be unavailable. */ }
+
+    const rememberNotification = (id: string) => {
+      notifiedReminderIds.current.add(id);
+      try {
+        window.localStorage.setItem(storageKey, JSON.stringify([...notifiedReminderIds.current]));
+      } catch { /* Deduplication still works for this session. */ }
+    };
+
     let active = true;
     const checkReminders = async () => {
       try {
         const reminders = await getDueReminders();
-        const reminder = reminders[0];
+        const reminder = reminders.find((item) => !notifiedReminderIds.current.has(item.id));
         if (!active || !reminder) return;
+        rememberNotification(reminder.id);
         setDueReminder(reminder);
         if (typeof Notification !== "undefined" && Notification.permission === "granted") new Notification(`LifeForge: ${reminder.title}`, { body: reminder.description || "Your reminder is due." });
       } catch { /* Reminder checks must not interrupt navigation. */ }
@@ -47,7 +62,7 @@ export function Header({ user, activeItem, onSelect, onMenuOpen }: HeaderProps) 
     void checkReminders();
     const timer = window.setInterval(() => void checkReminders(), 60_000);
     return () => { active = false; window.clearInterval(timer); };
-  }, []);
+  }, [user.email]);
 
   function triggerSearch(nextQuery: string) {
     const trimmedQuery = nextQuery.trim();

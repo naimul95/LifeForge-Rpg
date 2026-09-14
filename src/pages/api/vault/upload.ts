@@ -78,12 +78,13 @@ export default async function upload(request: NextApiRequest, response: NextApiR
     if (!fileKind) throw new Error("Only images, PDFs, and common document files are supported.");
     const uploaded = await uploadBuffer(file.buffer, userId, file.name);
     try {
-      await createUploadedMaterialForUser(userId, { topicId: fields.topicId, title: fields.title || file.name, description: fields.description || "", fileKind, fileName: file.name, mimeType: file.type, sizeBytes: file.buffer.length, cloudinaryPublicId: uploaded.publicId, cloudinaryUrl: uploaded.secureUrl, cloudinaryResourceType: uploaded.resourceType });
+      const material = await createUploadedMaterialForUser(userId, { topicId: fields.topicId, title: fields.title || file.name, description: fields.description || "", fileKind, fileName: file.name, mimeType: file.type, sizeBytes: file.buffer.length, cloudinaryPublicId: uploaded.publicId, cloudinaryUrl: uploaded.secureUrl, cloudinaryResourceType: uploaded.resourceType });
+      response.status(201).json({ ok: true, material });
+      return;
     } catch (error) {
       await cloudinary.uploader.destroy(uploaded.publicId, { resource_type: uploaded.resourceType, invalidate: true });
       throw error;
     }
-    response.status(201).json({ ok: true });
   } catch (error) {
     response.status(400).json({ error: error instanceof Error ? error.message : "Upload failed." });
   }

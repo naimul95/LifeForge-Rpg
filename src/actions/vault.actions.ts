@@ -63,7 +63,24 @@ function iso(value: Date) {
   return value.toISOString();
 }
 
-function materialDto(material: { id: string; title: string; description: string; kind: string; url: string | null; content: string | null; fileKind: string | null; fileName: string | null; mimeType: string | null; sizeBytes: number | null; createdAt: Date; updatedAt: Date }): VaultMaterialDto {
+type MaterialRecord = { id: string; title: string; description: string; kind: string; url: string | null; content: string | null; fileKind: string | null; fileName: string | null; mimeType: string | null; sizeBytes: number | null; createdAt: Date; updatedAt: Date };
+
+const materialSelect = {
+  id: true,
+  title: true,
+  description: true,
+  kind: true,
+  url: true,
+  content: true,
+  fileKind: true,
+  fileName: true,
+  mimeType: true,
+  sizeBytes: true,
+  createdAt: true,
+  updatedAt: true,
+} as const;
+
+function materialDto(material: MaterialRecord): VaultMaterialDto {
   const kind = material.kind === "file" ? (material.mimeType === "application/pdf" ? "pdf" : material.fileKind === "handwritten_note" ? "handwritten_note" : material.fileKind === "document" ? "document" : "image") : material.kind === "external_link" ? "website" : material.kind as VaultMaterialDto["kind"];
   return { id: material.id, title: material.title, description: material.description, kind, url: material.url, content: material.content, fileName: material.fileName, mimeType: material.mimeType, sizeBytes: material.sizeBytes, createdAt: iso(material.createdAt), updatedAt: iso(material.updatedAt) };
 }
@@ -181,7 +198,7 @@ export async function updateTopicProgress(topicId: string, progress: number) {
   await prisma.topic.updateMany({ where: { id: topicId, userId }, data: { completion, completedCount: Math.round(completion / 100 * topic.estimatedMinutes) } });
 }
 
-export async function createMaterial(input: unknown) {
+export async function createMaterial(input: unknown): Promise<VaultMaterialDto> {
   const { userId } = await requireSession();
   const data = materialSchema.parse(input);
   const topic = await prisma.topic.findFirst({ where: { id: data.topicId, userId } });
@@ -191,11 +208,12 @@ export async function createMaterial(input: unknown) {
   const content = data.kind === "note" ? data.content?.trim() ?? null : null;
   const url = data.kind === "note" ? null : data.url?.trim() ?? null;
 
-  await prisma.material.create({ data: { userId, subjectId: topic.subjectId, topicId: topic.id, kind, title: data.title, description: data.description, url, content } });
+  const material = await prisma.material.create({ data: { userId, subjectId: topic.subjectId, topicId: topic.id, kind, title: data.title, description: data.description, url, content }, select: materialSelect });
   revalidatePath("/dashboard/learning-vault");
+  return materialDto(material);
 }
 
-export async function createUploadedMaterialForUser(userId: string, input: unknown) {
+export async function createUploadedMaterialForUser(userId: string, input: unknown): Promise<VaultMaterialDto> {
   const data = z.object({
     topicId: z.string().cuid(),
     title: z.string().trim().min(1).max(160),
@@ -215,7 +233,7 @@ export async function createUploadedMaterialForUser(userId: string, input: unkno
   const topic = await prisma.topic.findFirst({ where: { id: data.topicId, userId } });
   if (!topic) throw new Error("Topic not found.");
 
-  await prisma.material.create({
+  const material = await prisma.material.create({
     data: {
       userId,
       subjectId: topic.subjectId,
@@ -231,13 +249,16 @@ export async function createUploadedMaterialForUser(userId: string, input: unkno
       cloudinaryUrl: data.cloudinaryUrl,
       cloudinaryResourceType: data.cloudinaryResourceType,
     },
+    select: materialSelect,
   });
+  return materialDto(material);
 }
 
-export async function createUploadedMaterial(input: unknown) {
+export async function createUploadedMaterial(input: unknown): Promise<VaultMaterialDto> {
   const { userId } = await requireSession();
-  await createUploadedMaterialForUser(userId, input);
+  const material = await createUploadedMaterialForUser(userId, input);
   revalidatePath("/dashboard/learning-vault");
+  return material;
 }
 
 export async function createRoadmap(input: unknown) {

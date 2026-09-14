@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { prisma } from "@/lib/db";
-import { sessionFromCookieHeader } from "@/lib/auth/session";
+import { clearedSessionCookieHeader, sessionFromCookieHeader } from "@/lib/auth/session";
 
 export default async function session(request: NextApiRequest, response: NextApiResponse) {
   if (request.method !== "GET") {
@@ -20,6 +20,7 @@ export default async function session(request: NextApiRequest, response: NextApi
     select: { id: true, email: true, displayName: true, avatarUrl: true },
   });
   if (!user) {
+    response.setHeader("Set-Cookie", clearedSessionCookieHeader());
     response.status(401).json({ authenticated: false });
     return;
   }
