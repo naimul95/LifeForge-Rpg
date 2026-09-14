@@ -51,13 +51,13 @@ function parseReminderDateTime(value: string) {
   return new Date(localTimestamp - offsetMinutes * 60_000);
 }
 
-export async function getPlanningData(): Promise<PlanningData> {
+export async function getPlanningData(includeHabits = false): Promise<PlanningData> {
   const { userId } = await requireSession();
-  const [goals, habits, reminders] = await Promise.all([
+  const [goals, reminders] = await Promise.all([
     prisma.goal.findMany({ where: { userId }, orderBy: [{ status: "asc" }, { deadline: "asc" }], take: 100, select: { id: true, title: true, description: true, category: true, startDate: true, deadline: true, progress: true, status: true } }),
-    prisma.habit.findMany({ where: { userId }, orderBy: { createdAt: "asc" }, take: 100, select: { id: true, name: true, polarity: true, logs: { where: { userId }, orderBy: { dateKey: "desc" }, take: 90, select: { dateKey: true, completed: true } } } }),
     prisma.reminder.findMany({ where: { userId }, orderBy: [{ completed: "asc" }, { remindAt: "asc" }], take: 100, select: { id: true, title: true, description: true, remindAt: true, completed: true } }),
   ]);
+  const habits = includeHabits ? await prisma.habit.findMany({ where: { userId }, orderBy: { createdAt: "asc" }, take: 100, select: { id: true, name: true, polarity: true, logs: { where: { userId }, orderBy: { dateKey: "desc" }, take: 90, select: { dateKey: true, completed: true } } } }) : [];
   return { goals: goals.map((goal) => ({ id: goal.id, title: goal.title, description: goal.description, category: goal.category, startDate: dateKey(goal.startDate), deadline: dateKey(goal.deadline), progress: goal.progress, status: goal.status })), habits: habits.map((habit) => ({ id: habit.id, name: habit.name, polarity: habit.polarity, logs: habit.logs.map((log) => ({ dateKey: dateKey(log.dateKey), completed: log.completed })), ...streaks(habit.logs) })), reminders: reminders.map((reminder) => ({ id: reminder.id, title: reminder.title, description: reminder.description, remindAt: reminder.remindAt.toISOString(), completed: reminder.completed })) };
 }
 

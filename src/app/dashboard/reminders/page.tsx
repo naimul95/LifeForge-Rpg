@@ -4,5 +4,5 @@ import { PlanningDashboard } from "@/components/features/planning/planning-dashb
 export const dynamic = "force-dynamic";
 
 export default async function RemindersPage() {
-  return <PlanningDashboard initialData={await getPlanningData()} todayValue={new Date().toISOString().slice(0, 10)} />;
+  return <PlanningDashboard initialData={await getPlanningData(false)} todayValue={new Date().toISOString().slice(0, 10)} />;
 }

@@ -26,7 +26,13 @@ export interface VaultTopicDto {
   averageSessionMinutes: number;
   estimatedMinutes: number;
   lastStudied: string | null;
-  roadmap: string[];
+  roadmap: Array<{
+    id: string;
+    title: string;
+    description: string;
+    completed: boolean;
+  }>;
+  roadmapProgress: number;
   materials: VaultMaterialDto[];
 }
 

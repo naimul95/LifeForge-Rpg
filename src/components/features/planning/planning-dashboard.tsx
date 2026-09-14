@@ -8,9 +8,9 @@ import type { PlanningData } from "@/types/planning-dashboard";
 
 function today() { return new Date().toISOString().slice(0, 10); }
 
-export function PlanningDashboard({ initialData, todayValue }: { initialData: PlanningData; todayValue?: string }) {
+export function PlanningDashboard({ initialData, todayValue, includeHabits = false }: { initialData: PlanningData; todayValue?: string; includeHabits?: boolean }) {
   const [data, setData] = useState(initialData); const [busy, setBusy] = useState(false); const [error, setError] = useState(""); const [notice, setNotice] = useState("");
-  async function refresh() { setData(await getPlanningData()); }
+  async function refresh() { setData(await getPlanningData(includeHabits)); }
   async function run(task: () => Promise<void>, message: string) { setBusy(true); setError(""); setNotice(""); try { await task(); await refresh(); setNotice(message); } catch (caught) { setError(caught instanceof Error ? caught.message : "Action failed."); } finally { setBusy(false); } }
   return <main className="mx-auto max-w-375 px-5 pb-12 pt-7 sm:px-8 lg:px-10"><div className="mb-7"><p className="eyebrow text-cyan-300">Personal progress</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Goals and reminders</h1><p className="mt-2 text-sm text-slate-500">Set meaningful goals, track your progress, and turn plans into real progress.</p></div>{error && <div className="state-row mb-4 text-rose-300">{error}</div>}{notice && <div className="state-row mb-4 text-emerald-300"><Check size={16} />{notice}</div>}<div className="grid gap-4 xl:grid-cols-2"><Goals goals={data.goals} busy={busy} onCreate={(input) => run(() => createGoal(input), "Goal created.")} onComplete={(id) => run(() => completeGoal(id), "Goal completed.")} onDelete={(id) => run(() => deleteGoal(id), "Goal deleted.")} todayValue={todayValue} /><Reminders reminders={data.reminders} busy={busy} onCreate={(input) => run(() => createReminder(input), "Reminder created.")} onToggle={(id, value) => run(() => toggleReminder(id, value), "Reminder updated.")} onDelete={(id) => run(() => deleteReminder(id), "Reminder deleted.")} /></div></main>;
 }

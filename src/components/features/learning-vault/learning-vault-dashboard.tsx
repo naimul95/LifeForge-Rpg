@@ -1,36 +1,111 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { BookOpen, Check, Clipboard, Download, FileText, FolderOpen, Globe, Image as ImageIcon, Play, Plus, Share2, Trash2, UploadCloud, Video, X } from "lucide-react";
+import {
+  BookOpen,
+  Check,
+  Clipboard,
+  Download,
+  FileText,
+  FolderOpen,
+  Globe,
+  Image as ImageIcon,
+  Pencil,
+  Play,
+  Plus,
+  Share2,
+  Trash2,
+  UploadCloud,
+  Video,
+  X,
+} from "lucide-react";
 
-import { createMaterial, createRoadmap, createSubject, createTopic, deleteMaterial, getVaultData, renameMaterial, shareMaterial, updateTopicProgress } from "@/actions/vault.actions";
-import type { VaultMaterialDto, VaultSubjectDto } from "@/types/vault-dashboard";
+import {
+  createMaterial,
+  createRoadmap,
+  createSubject,
+  createTopic,
+  deleteMaterial,
+  deleteSubject,
+  deleteTopic,
+  deleteRoadmap,
+  getVaultData,
+  renameMaterial,
+  renameSubject,
+  renameTopic,
+  shareMaterial,
+  setRoadmapCompleted,
+  updateRoadmap,
+  updateTopicProgress,
+} from "@/actions/vault.actions";
+import type {
+  VaultMaterialDto,
+  VaultSubjectDto,
+} from "@/types/vault-dashboard";
 
-export function LearningVaultDashboard({ initialSubjects }: { initialSubjects: VaultSubjectDto[] }) {
+export function LearningVaultDashboard({
+  initialSubjects,
+}: {
+  initialSubjects: VaultSubjectDto[];
+}) {
   const [subjects, setSubjects] = useState(initialSubjects);
   const [subjectId, setSubjectId] = useState(initialSubjects[0]?.id ?? "");
-  const [topicId, setTopicId] = useState(initialSubjects[0]?.topics[0]?.id ?? "");
+  const [topicId, setTopicId] = useState(
+    initialSubjects[0]?.topics[0]?.id ?? "",
+  );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [activeDialog, setActiveDialog] = useState<
+    | "subject-create"
+    | "topic-create"
+    | "subject-rename"
+    | "topic-rename"
+    | "subject-delete"
+    | "topic-delete"
+    | "roadmap-rename"
+    | "roadmap-delete"
+    | null
+  >(null);
+  const [dialogId, setDialogId] = useState("");
+  const [dialogName, setDialogName] = useState("");
+  const [dialogDescription, setDialogDescription] = useState("");
+  const [createMenuOpen, setCreateMenuOpen] = useState(false);
   const subject = subjects.find((item) => item.id === subjectId) ?? null;
-  const topic = subject?.topics.find((item) => item.id === topicId) ?? subject?.topics[0] ?? null;
+  const topic =
+    subject?.topics.find((item) => item.id === topicId) ??
+    subject?.topics[0] ??
+    null;
 
   async function refresh() {
     const next = await getVaultData();
     setSubjects(next);
     const nextSubject = next.find((item) => item.id === subjectId) ?? next[0];
     setSubjectId(nextSubject?.id ?? "");
-    setTopicId(nextSubject?.topics.find((item) => item.id === topicId)?.id ?? nextSubject?.topics[0]?.id ?? "");
+    setTopicId(
+      nextSubject?.topics.find((item) => item.id === topicId)?.id ??
+        nextSubject?.topics[0]?.id ??
+        "",
+    );
   }
 
   async function run(task: () => Promise<void>, success?: string) {
-    setBusy(true); setError(""); setNotice("");
-    try { await task(); await refresh(); if (success) setNotice(success); }
-    catch (caught) { setError(caught instanceof Error ? caught.message : "The Vault action failed."); }
-    finally { setBusy(false); }
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      await task();
+      await refresh();
+      if (success) setNotice(success);
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "The Vault action failed.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
 
   function selectSubject(id: string) {
@@ -38,43 +113,1020 @@ export function LearningVaultDashboard({ initialSubjects }: { initialSubjects: V
     setTopicId(subjects.find((item) => item.id === id)?.topics[0]?.id ?? "");
   }
 
-  return <main className="mx-auto max-w-375 px-5 pb-12 pt-7 sm:px-8 lg:px-10">
-    <div className="mb-7 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-      <div><p className="eyebrow text-cyan-300">PostgreSQL knowledge archive</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Learning Vault</h1><p className="mt-2 text-sm text-slate-500">Subjects are worlds. Topics are the map. Materials are what you collect.</p></div>
-      <div className="flex flex-wrap gap-2"><CreateSubject onCreate={(input) => run(async () => { await createSubject(input); }, "Subject created.")} /><CreateTopic subjectId={subjectId} disabled={!subjectId} onCreate={(input) => run(async () => { await createTopic(input); }, "Topic created.")} /></div>
-    </div>
-    {error && <div className="state-row mb-4 text-rose-300"><X size={17} />{error}<button className="ml-auto text-xs" onClick={() => setError("")}>Dismiss</button></div>}
-    {notice && <div className="state-row mb-4 text-emerald-300"><Check size={17} />{notice}</div>}
-    <div className="grid gap-4 xl:grid-cols-[280px_1fr]">
-      <section className="glass-panel p-4"><div className="mb-3 flex items-center justify-between"><div><p className="eyebrow text-cyan-300">Subjects</p><p className="mt-1 text-xs text-slate-500">{subjects.length} in your archive</p></div><FolderOpen size={18} className="text-cyan-300" /></div>{subjects.length === 0 ? <div className="state-row">Create your first subject.</div> : <div className="space-y-2">{subjects.map((item) => <button key={item.id} onClick={() => selectSubject(item.id)} className={`subject-item ${item.id === subjectId ? "subject-item-active" : ""}`}><span className="subject-dot" /><span className="min-w-0 flex-1 truncate text-left">{item.name}</span><span className="text-[10px] text-slate-600">{item.topics.length}</span></button>)}</div>}</section>
-      {subject ? <section className="space-y-4"><div className="glass-panel p-5"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start"><div><p className="eyebrow text-cyan-300">Subject overview</p><h2 className="mt-1 text-2xl font-medium text-white">{subject.name}</h2><p className="mt-1 text-sm text-slate-500">{subject.description || "No description yet."}</p><div className="mt-4 max-w-sm"><div className="flex justify-between text-xs text-slate-500"><span>Overall progress</span><span>{Math.round(subject.progress)}%</span></div><div className="progress-track mt-2"><div className="progress-fill" style={{ width: `${subject.progress}%` }} /></div></div></div><label className="field-label min-w-56">Topic<select className="vault-input mt-2" value={topic?.id ?? ""} onChange={(event) => setTopicId(event.target.value)}>{subject.topics.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label></div></div>{topic ? <TopicDetails topic={topic} busy={busy} onProgress={(value) => run(() => updateTopicProgress(topic.id, value), "Progress updated.")} onRoadmap={(title) => run(() => createRoadmap({ topicId: topic.id, title, description: "" }), "Roadmap item added.")} onMaterial={(input) => run(() => createMaterial({ ...input, topicId: topic.id }), "Material saved.")} onUpload={async (form) => { setBusy(true); setError(""); setNotice(""); try { const response = await fetch("/api/vault/upload", { method: "POST", body: form }); const result = await response.json() as { error?: string }; if (!response.ok) throw new Error(result.error ?? "Upload failed."); await refresh(); setNotice("File uploaded."); } catch (caught) { setError(caught instanceof Error ? caught.message : "Upload failed."); } finally { setBusy(false); } }} onRename={(id, title) => run(() => renameMaterial(id, title), "Material renamed.")} onDelete={(id) => run(() => deleteMaterial(id), "Material deleted.")} onShare={async (id) => { try { const link = await shareMaterial(id); if (typeof navigator !== "undefined" && navigator.share) { try { await navigator.share({ title: "LifeForge Learning Vault material", text: "Open this shared material", url: link }); setNotice("Share dialog opened."); return; } catch (error) { if (error instanceof DOMException && error.name === "AbortError") { setNotice("Share canceled."); return; } } } if (navigator.clipboard) { await navigator.clipboard.writeText(link); setNotice("Share link copied to clipboard."); return; } setNotice(`Share link ready: ${link}`); } catch (caught) { setError(caught instanceof Error ? caught.message : "Unable to share material."); } }} /> : <div className="state-row justify-center"><BookOpen size={17} />Create a topic to open its details.</div>}</section> : <div className="glass-panel flex min-h-72 items-center justify-center p-6 text-center text-sm text-slate-500">Your Vault is ready. Create a subject to begin.</div>}
-    </div>
-  </main>;
+  function openDialog(dialog: typeof activeDialog, id = "", name = "", description = "") {
+    setCreateMenuOpen(false);
+    setDialogId(id);
+    setDialogName(name);
+    setDialogDescription(description);
+    setActiveDialog(dialog);
+  }
+
+  async function submitDialog(event: React.FormEvent) {
+    event.preventDefault();
+    if (!activeDialog) return;
+    if (activeDialog === "subject-create")
+      await run(
+        () =>
+          createSubject({ name: dialogName, description: "", color: "cyan" }),
+        "Subject created.",
+      );
+    if (activeDialog === "topic-create")
+      await run(
+        () =>
+          createTopic({
+            subjectId,
+            name: dialogName,
+            description: "",
+            estimatedMinutes: 60,
+          }),
+        "Topic created.",
+      );
+    if (activeDialog === "subject-rename")
+      await run(
+        () => renameSubject({ id: dialogId, name: dialogName }),
+        "Subject renamed.",
+      );
+    if (activeDialog === "topic-rename")
+      await run(
+        () => renameTopic({ id: dialogId, name: dialogName }),
+        "Topic renamed.",
+      );
+    if (activeDialog === "subject-delete")
+      await run(() => deleteSubject(dialogId), "Subject deleted.");
+    if (activeDialog === "topic-delete")
+      await run(() => deleteTopic(dialogId), "Topic deleted.");
+    if (activeDialog === "roadmap-rename")
+      await run(() => updateRoadmap({ id: dialogId, title: dialogName, description: dialogDescription }), "Roadmap item updated.");
+    if (activeDialog === "roadmap-delete")
+      await run(() => deleteRoadmap(dialogId), "Roadmap item deleted.");
+    setActiveDialog(null);
+    setDialogName("");
+    setDialogDescription("");
+  }
+
+  return (
+    <main className="mx-auto max-w-375 px-5 pb-12 pt-7 sm:px-8 lg:px-10">
+      <div className="mb-7 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+        <div>
+          <p className="eyebrow text-cyan-300">Knowledge archive</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Learning Vault
+          </h1>
+          <p className="mt-2 text-sm text-slate-500">
+            Subjects are worlds. Topics are the map. Materials are what you
+            collect.
+          </p>
+        </div>
+        <div className="relative">
+          <button
+            className="primary-button"
+            type="button"
+            onClick={() => setCreateMenuOpen((open) => !open)}
+          >
+            <Plus size={15} /> Create
+          </button>
+          {createMenuOpen && (
+            <div className="popover right-0 top-12 z-20 w-48">
+              <button
+                className="popover-action border-0 pt-0"
+                type="button"
+                onClick={() => openDialog("subject-create")}
+              >
+                <BookOpen size={14} /> Subject
+              </button>
+              <button
+                className="popover-action"
+                type="button"
+                onClick={() => openDialog("topic-create")}
+              >
+                <Plus size={14} /> Topic
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+      {error && (
+        <div className="state-row mb-4 text-rose-300">
+          <X size={17} />
+          {error}
+          <button className="ml-auto text-xs" onClick={() => setError("")}>
+            Dismiss
+          </button>
+        </div>
+      )}
+      {notice && (
+        <div className="state-row mb-4 text-emerald-300">
+          <Check size={17} />
+          {notice}
+        </div>
+      )}
+      <div className="grid gap-4 xl:grid-cols-[280px_1fr]">
+        <section className="glass-panel p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <p className="eyebrow text-cyan-300">Subjects</p>
+              <p className="mt-1 text-xs text-slate-500">
+                {subjects.length} in your archive
+              </p>
+            </div>
+            <FolderOpen size={18} className="text-cyan-300" />
+          </div>
+          {subjects.length === 0 ? (
+            <div className="state-row">Create your first subject.</div>
+          ) : (
+            <div className="space-y-2">
+              {subjects.map((item) => (
+                <div
+                  key={item.id}
+                  className={`subject-item ${item.id === subjectId ? "subject-item-active" : ""}`}
+                >
+                  <button
+                    type="button"
+                    className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                    onClick={() => selectSubject(item.id)}
+                  >
+                    <span className="subject-dot" />
+                    <span className="min-w-0 flex-1 truncate">{item.name}</span>
+                    <span className="text-[10px] text-slate-600">
+                      {item.topics.length}
+                    </span>
+                  </button>
+                  <div className="flex items-center gap-1">
+                    <button type="button" className="icon-button" aria-label={`Rename ${item.name}`} onClick={() => openDialog("subject-rename", item.id, item.name)}><Pencil size={14} /></button>
+                    <button type="button" className="icon-button text-rose-300" aria-label={`Delete ${item.name}`} onClick={() => openDialog("subject-delete", item.id, item.name)}><Trash2 size={14} /></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+        {subject ? (
+          <section className="space-y-4">
+            <div className="glass-panel p-5">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                <div>
+                  <p className="eyebrow text-cyan-300">Subject overview</p>
+                  <div className="flex items-center gap-2">
+                    <h2 className="mt-1 text-2xl font-medium text-white">
+                      {subject.name}
+                    </h2>
+                    <button type="button" className="icon-button" aria-label={`Rename ${subject.name}`} onClick={() => openDialog("subject-rename", subject.id, subject.name)}>
+                      <Pencil size={14} />
+                    </button>
+                    <button type="button" className="icon-button text-rose-300" aria-label={`Delete ${subject.name}`} onClick={() => openDialog("subject-delete", subject.id, subject.name)}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {subject.description || "No description yet."}
+                  </p>
+                  <div className="mt-4 max-w-sm">
+                    <div className="flex justify-between text-xs text-slate-500">
+                      <span>Overall progress</span>
+                      <span>{Math.round(subject.progress)}%</span>
+                    </div>
+                    <div className="progress-track mt-2">
+                      <div
+                        className="progress-fill"
+                        style={{ width: `${subject.progress}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <label className="field-label min-w-56">
+                  Topic
+                  <select
+                    className="vault-input mt-2"
+                    value={topic?.id ?? ""}
+                    onChange={(event) => setTopicId(event.target.value)}
+                  >
+                    {subject.topics.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </div>
+            {topic ? (
+              <TopicDetails
+                topic={topic}
+                busy={busy}
+                onProgress={(value) =>
+                  run(
+                    () => updateTopicProgress(topic.id, value),
+                    "Progress updated.",
+                  )
+                }
+                onRoadmap={(title) =>
+                  run(
+                    () =>
+                      createRoadmap({
+                        topicId: topic.id,
+                        title,
+                        description: "",
+                      }),
+                    "Roadmap item added.",
+                  )
+                }
+                onMaterial={(input) =>
+                  run(
+                    () => createMaterial({ ...input, topicId: topic.id }),
+                    "Material saved.",
+                  )
+                }
+                onUpload={async (form) => {
+                  setBusy(true);
+                  setError("");
+                  setNotice("");
+                  try {
+                    const response = await fetch("/api/vault/upload", {
+                      method: "POST",
+                      body: form,
+                    });
+                    const result = (await response.json()) as {
+                      error?: string;
+                    };
+                    if (!response.ok)
+                      throw new Error(result.error ?? "Upload failed.");
+                    await refresh();
+                    setNotice("File uploaded.");
+                  } catch (caught) {
+                    setError(
+                      caught instanceof Error
+                        ? caught.message
+                        : "Upload failed.",
+                    );
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+                onRename={(id, title) =>
+                  run(() => renameMaterial(id, title), "Material renamed.")
+                }
+                onDelete={(id) =>
+                  run(() => deleteMaterial(id), "Material deleted.")
+                }
+                onShare={async (id) => {
+                  try {
+                    const link = await shareMaterial(id);
+                    if (typeof navigator !== "undefined" && navigator.share) {
+                      try {
+                        await navigator.share({
+                          title: "LifeForge Learning Vault material",
+                          text: "Open this shared material",
+                          url: link,
+                        });
+                        setNotice("Share dialog opened.");
+                        return;
+                      } catch (error) {
+                        if (
+                          error instanceof DOMException &&
+                          error.name === "AbortError"
+                        ) {
+                          setNotice("Share canceled.");
+                          return;
+                        }
+                      }
+                    }
+                    if (navigator.clipboard) {
+                      await navigator.clipboard.writeText(link);
+                      setNotice("Share link copied to clipboard.");
+                      return;
+                    }
+                    setNotice(`Share link ready: ${link}`);
+                  } catch (caught) {
+                    setError(
+                      caught instanceof Error
+                        ? caught.message
+                        : "Unable to share material.",
+                    );
+                  }
+                }}
+                onRenameTopic={() => openDialog("topic-rename", topic.id, topic.name)}
+                onDeleteTopic={() => openDialog("topic-delete", topic.id, topic.name)}
+                onEditRoadmap={(id, title, description) => openDialog("roadmap-rename", id, title, description)}
+                onDeleteRoadmap={(id, title) => openDialog("roadmap-delete", id, title)}
+                onToggleRoadmap={(id, completed) => run(() => setRoadmapCompleted(id, completed), completed ? "Roadmap item completed." : "Roadmap item reopened.")}
+              />
+            ) : (
+              <div className="state-row justify-center">
+                <BookOpen size={17} />
+                Create a topic to open its details.
+              </div>
+            )}
+          </section>
+        ) : (
+          <div className="glass-panel flex min-h-72 items-center justify-center p-6 text-center text-sm text-slate-500">
+            Your Vault is ready. Create a subject to begin.
+          </div>
+        )}
+      </div>
+      {activeDialog && (
+        <VaultDialog
+          activeDialog={activeDialog}
+          name={dialogName}
+          description={dialogDescription}
+          busy={busy}
+          onNameChange={setDialogName}
+          onDescriptionChange={setDialogDescription}
+          onClose={() => { setActiveDialog(null); setCreateMenuOpen(false); }}
+          onSubmit={submitDialog}
+        />
+      )}
+    </main>
+  );
 }
 
-function TopicDetails({ topic, busy, onProgress, onRoadmap, onMaterial, onUpload, onRename, onDelete, onShare }: { topic: VaultSubjectDto["topics"][number]; busy: boolean; onProgress: (value: number) => void; onRoadmap: (title: string) => Promise<void>; onMaterial: (input: { kind: "note" | "video" | "website"; title: string; description: string; url?: string; content?: string }) => Promise<void>; onUpload: (form: FormData) => Promise<void>; onRename: (id: string, title: string) => Promise<void>; onDelete: (id: string) => Promise<void>; onShare: (id: string) => Promise<void> }) {
+function TopicDetails({
+  topic,
+  busy,
+  onProgress,
+  onRoadmap,
+  onMaterial,
+  onUpload,
+  onRename,
+  onDelete,
+  onShare,
+  onRenameTopic,
+  onDeleteTopic,
+  onEditRoadmap,
+  onDeleteRoadmap,
+  onToggleRoadmap,
+}: {
+  topic: VaultSubjectDto["topics"][number];
+  busy: boolean;
+  onProgress: (value: number) => void;
+  onRoadmap: (title: string) => Promise<void>;
+  onMaterial: (input: {
+    kind: "note" | "video" | "website";
+    title: string;
+    description: string;
+    url?: string;
+    content?: string;
+  }) => Promise<void>;
+  onUpload: (form: FormData) => Promise<void>;
+  onRename: (id: string, title: string) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+  onShare: (id: string) => Promise<void>;
+  onRenameTopic: () => void;
+  onDeleteTopic: () => void;
+  onEditRoadmap: (id: string, title: string, description: string) => void;
+  onDeleteRoadmap: (id: string, title: string) => void;
+  onToggleRoadmap: (id: string, completed: boolean) => void;
+}) {
   const router = useRouter();
   const [materialOpen, setMaterialOpen] = useState(false);
   const [roadmapTitle, setRoadmapTitle] = useState("");
-  return <div className="space-y-4"><div className="glass-panel p-5"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start"><div><p className="eyebrow text-cyan-300">Topic details</p><h2 className="mt-1 text-xl font-medium text-white">{topic.name}</h2><p className="mt-1 text-sm text-slate-500">{topic.description || "Track progress, study time, and collected material here."}</p></div><div className="flex flex-wrap items-center gap-2"><span className="text-xs text-slate-500">{topic.materials.length} materials</span><button className="primary-button" type="button" onClick={() => router.push(`/dashboard/study-timer?subject=${encodeURIComponent(topic.subjectId)}&topic=${encodeURIComponent(topic.id)}`)}><Play size={15} /> Start studying</button></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><Metric label="Target" value={`${Math.round(topic.estimatedMinutes)} min`} /><Metric label="Progress" value={`${Math.round(topic.progress)}%`} /><Metric label="Remaining" value={`${Math.round(topic.remaining)} min`} /><Metric label="Study time" value={`${Math.round(topic.studyMinutes)} min`} /><Metric label="Last studied" value={topic.lastStudied ? new Date(topic.lastStudied).toLocaleDateString("en-US", { timeZone: "UTC" }) : "Never"} /><Metric label="Sessions" value={String(topic.sessionCount)} /><Metric label="Average" value={`${Math.round(topic.averageSessionMinutes)} min`} /></div><div className="progress-track mt-5"><div className="progress-fill" style={{ width: `${topic.progress}%` }} /></div><label className="mt-3 block text-xs text-slate-500">Progress<input className="mt-2 w-full accent-cyan-300" type="range" min="0" max="100" step="10" value={topic.progress} disabled={busy} onChange={(event) => onProgress(Number(event.target.value))} /></label></div><div className="grid gap-4 lg:grid-cols-[1fr_1.7fr]"><section className="glass-panel p-5"><div className="mb-3 flex items-center justify-between"><div><p className="eyebrow text-cyan-300">Roadmap</p><h3 className="mt-1 text-sm font-medium text-white">Next steps</h3></div><Clipboard size={17} className="text-cyan-300" /></div>{topic.roadmap.length ? <ul className="mb-4 space-y-2">{topic.roadmap.map((item) => <li key={item} className="state-row text-xs text-slate-300"><Check size={14} className="text-emerald-300" />{item}</li>)}</ul> : <p className="mb-4 text-xs text-slate-600">No roadmap items yet.</p>}<form className="flex gap-2" onSubmit={async (event) => { event.preventDefault(); if (!roadmapTitle.trim()) return; await onRoadmap(roadmapTitle); setRoadmapTitle(""); }}><input className="vault-input min-w-0" placeholder="Add a milestone" value={roadmapTitle} onChange={(event) => setRoadmapTitle(event.target.value)} /><button className="icon-button" disabled={busy} aria-label="Add roadmap item"><Plus size={16} /></button></form></section><section className="glass-panel p-5"><div className="mb-4 flex items-center justify-between"><div><p className="eyebrow text-cyan-300">Materials</p><h3 className="mt-1 text-sm font-medium text-white">Collected knowledge</h3></div><button className="primary-button" onClick={() => setMaterialOpen(!materialOpen)}><Plus size={15} /> Add material</button></div>{materialOpen && <MaterialComposer busy={busy} onMaterial={async (input) => { await onMaterial(input); setMaterialOpen(false); }} onUpload={async (form) => { await onUpload(form); setMaterialOpen(false); }} topicId={topic.id} />}{topic.materials.length ? <div className="grid gap-3 md:grid-cols-2">{topic.materials.map((material) => <MaterialCard key={material.id} material={material} busy={busy} onRename={onRename} onDelete={onDelete} onShare={onShare} />)}</div> : <div className="state-row justify-center"><FileText size={16} />No materials collected yet.</div>}</section></div></div>;
+  return (
+    <div className="space-y-4">
+      <div className="glass-panel p-5">
+        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
+          <div>
+            <p className="eyebrow text-cyan-300">Topic details</p>
+            <div className="flex items-center gap-2">
+              <h2 className="mt-1 text-xl font-medium text-white">
+                {topic.name}
+              </h2>
+              <button type="button" className="icon-button" aria-label={`Rename ${topic.name}`} onClick={onRenameTopic}><Pencil size={14} /></button>
+              <button type="button" className="icon-button text-rose-300" aria-label={`Delete ${topic.name}`} onClick={onDeleteTopic}><Trash2 size={14} /></button>
+            </div>
+            <p className="mt-1 text-sm text-slate-500">
+              {topic.description ||
+                "Track progress, study time, and collected material here."}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-slate-500">
+              {topic.materials.length} materials
+            </span>
+            <button
+              className="primary-button"
+              type="button"
+              onClick={() =>
+                router.push(
+                  `/dashboard/study-timer?subject=${encodeURIComponent(topic.subjectId)}&topic=${encodeURIComponent(topic.id)}`,
+                )
+              }
+            >
+              <Play size={15} /> Start studying
+            </button>
+          </div>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Metric
+            label="Target"
+            value={`${Math.round(topic.estimatedMinutes)} min`}
+          />
+          <Metric label="Progress" value={`${Math.round(topic.progress)}%`} />
+          <Metric
+            label="Remaining"
+            value={`${Math.round(topic.remaining)} min`}
+          />
+          <Metric
+            label="Study time"
+            value={`${Math.round(topic.studyMinutes)} min`}
+          />
+          <Metric
+            label="Last studied"
+            value={
+              topic.lastStudied
+                ? new Date(topic.lastStudied).toLocaleDateString("en-US", {
+                    timeZone: "UTC",
+                  })
+                : "Never"
+            }
+          />
+          <Metric label="Sessions" value={String(topic.sessionCount)} />
+          <Metric
+            label="Average"
+            value={`${Math.round(topic.averageSessionMinutes)} min`}
+          />
+        </div>
+        <div className="progress-track mt-5">
+          <div
+            className="progress-fill"
+            style={{ width: `${topic.progress}%` }}
+          />
+        </div>
+        <label className="mt-3 block text-xs text-slate-500">
+          Progress
+          <input
+            className="mt-2 w-full accent-cyan-300"
+            type="range"
+            min="0"
+            max="100"
+            step="10"
+            value={topic.progress}
+            disabled={busy}
+            onChange={(event) => onProgress(Number(event.target.value))}
+          />
+        </label>
+      </div>
+      <div className="grid gap-4 lg:grid-cols-[1fr_1.7fr]">
+        <section className="glass-panel p-5">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <p className="eyebrow text-cyan-300">Roadmap</p>
+              <h3 className="mt-1 text-sm font-medium text-white">
+                Next steps
+              </h3>
+              <p className="mt-1 text-xs text-slate-500">{topic.roadmapProgress}% complete</p>
+            </div>
+            <Clipboard size={17} className="text-cyan-300" />
+          </div>
+          {topic.roadmap.length ? (
+            <ul className="mb-4 space-y-2">
+              {topic.roadmap.map((item) => (
+                <li key={item.id} className={`state-row text-xs ${item.completed ? "text-slate-500" : "text-slate-300"}`}>
+                  <button type="button" className={`icon-button ${item.completed ? "text-emerald-300" : "text-slate-500"}`} aria-label={`${item.completed ? "Mark incomplete" : "Mark complete"} ${item.title}`} onClick={() => onToggleRoadmap(item.id, !item.completed)}>
+                    {item.completed ? <Check size={14} /> : <span className="inline-block h-3.5 w-3.5 rounded border border-current" />}
+                  </button>
+                  <span className={`min-w-0 flex-1 ${item.completed ? "line-through" : ""}`}>{item.title}</span>
+                  <button type="button" className="icon-button" aria-label={`Edit ${item.title}`} onClick={() => onEditRoadmap(item.id, item.title, item.description)}><Pencil size={13} /></button>
+                  <button type="button" className="icon-button text-rose-300" aria-label={`Delete ${item.title}`} onClick={() => onDeleteRoadmap(item.id, item.title)}><Trash2 size={13} /></button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mb-4 text-xs text-slate-600">No roadmap items yet.</p>
+          )}
+          <form
+            className="flex gap-2"
+            onSubmit={async (event) => {
+              event.preventDefault();
+              if (!roadmapTitle.trim()) return;
+              await onRoadmap(roadmapTitle);
+              setRoadmapTitle("");
+            }}
+          >
+            <input
+              className="vault-input min-w-0"
+              placeholder="Add a milestone"
+              value={roadmapTitle}
+              onChange={(event) => setRoadmapTitle(event.target.value)}
+            />
+            <button
+              className="icon-button"
+              disabled={busy}
+              aria-label="Add roadmap item"
+            >
+              <Plus size={16} />
+            </button>
+          </form>
+        </section>
+        <section className="glass-panel p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <p className="eyebrow text-cyan-300">Materials</p>
+              <h3 className="mt-1 text-sm font-medium text-white">
+                Collected knowledge
+              </h3>
+            </div>
+            <button
+              className="primary-button"
+              onClick={() => setMaterialOpen(!materialOpen)}
+            >
+              <Plus size={15} /> Add material
+            </button>
+          </div>
+          {materialOpen && (
+            <MaterialComposer
+              busy={busy}
+              onMaterial={async (input) => {
+                await onMaterial(input);
+                setMaterialOpen(false);
+              }}
+              onUpload={async (form) => {
+                await onUpload(form);
+                setMaterialOpen(false);
+              }}
+              topicId={topic.id}
+            />
+          )}
+          {topic.materials.length ? (
+            <div className="grid gap-3 md:grid-cols-2">
+              {topic.materials.map((material) => (
+                <MaterialCard
+                  key={material.id}
+                  material={material}
+                  busy={busy}
+                  onRename={onRename}
+                  onDelete={onDelete}
+                  onShare={onShare}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="state-row justify-center">
+              <FileText size={16} />
+              No materials collected yet.
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
 }
 
-function MaterialComposer({ busy, onMaterial, onUpload, topicId }: { busy: boolean; onMaterial: (input: { kind: "note" | "video" | "website"; title: string; description: string; url?: string; content?: string }) => Promise<void>; onUpload: (form: FormData) => Promise<void>; topicId: string }) {
-  const [kind, setKind] = useState<"note" | "video" | "website" | "file">("note"); const [fileKind, setFileKind] = useState<"pdf" | "image" | "handwritten_note" | "document">("image"); const [title, setTitle] = useState(""); const [description, setDescription] = useState(""); const [url, setUrl] = useState(""); const [content, setContent] = useState(""); const [file, setFile] = useState<File | null>(null);
-  async function submit(event: React.FormEvent) { event.preventDefault(); if (kind === "file") { if (!file) return; const form = new FormData(); form.set("topicId", topicId); form.set("title", title || file.name); form.set("description", description); form.set("fileKind", fileKind); form.set("file", file); await onUpload(form); } else await onMaterial({ kind, title, description, url: kind === "note" ? undefined : url, content: kind === "note" ? content : undefined }); }
-  return <form className="mb-4 space-y-3 border-b border-white/10 pb-4" onSubmit={submit}><div className="grid gap-3 sm:grid-cols-2"><label className="field-label">Type<select className="vault-input mt-2" value={kind} onChange={(event) => setKind(event.target.value as typeof kind)}><option value="note">Handwritten / text note</option><option value="file">File upload</option><option value="video">Video link</option><option value="website">Website link</option></select></label><Field label="Title" value={title} setValue={setTitle} required /></div>{kind === "file" ? <div className="grid gap-3 sm:grid-cols-2"><label className="field-label">File type<select className="vault-input mt-2" value={fileKind} onChange={(event) => setFileKind(event.target.value as typeof fileKind)}><option value="image">Image</option><option value="handwritten_note">Handwritten note</option><option value="pdf">PDF</option><option value="document">Document</option></select></label><label className="field-label">File<input className="vault-input mt-2" type="file" accept="application/pdf,image/*,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv" onChange={(event) => setFile(event.target.files?.[0] ?? null)} required /></label></div> : kind === "note" ? <label className="field-label">Note content<textarea className="vault-input mt-2 min-h-24" value={content} onChange={(event) => setContent(event.target.value)} required /></label> : <Field label="URL" value={url} setValue={setUrl} type="url" required />}<Field label="Description" value={description} setValue={setDescription} /><button className="primary-button" disabled={busy}><UploadCloud size={15} /> Save material</button></form>;
+function VaultDialog({
+  activeDialog,
+  name,
+  description,
+  busy,
+  onNameChange,
+  onDescriptionChange,
+  onClose,
+  onSubmit,
+}: {
+  activeDialog: "subject-create" | "topic-create" | "subject-rename" | "topic-rename" | "subject-delete" | "topic-delete" | "roadmap-rename" | "roadmap-delete";
+  name: string;
+  description: string;
+  busy: boolean;
+  onNameChange: (value: string) => void;
+  onDescriptionChange: (value: string) => void;
+  onClose: () => void;
+  onSubmit: (event: React.FormEvent) => Promise<void>;
+}) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  const isDelete = activeDialog.endsWith("delete");
+  const entity = activeDialog.startsWith("subject") ? "subject" : activeDialog.startsWith("topic") ? "topic" : "roadmap item";
+  const title = isDelete ? `Delete ${entity}?` : activeDialog.endsWith("create") ? `Create ${entity}` : `Rename ${entity}`;
+
+  return (
+    <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <form className="modal" role="dialog" aria-modal="true" aria-labelledby="vault-dialog-title" onMouseDown={(event) => event.stopPropagation()} onSubmit={onSubmit}>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="eyebrow text-cyan-300">Learning Vault</p>
+            <h2 id="vault-dialog-title" className="mt-2 text-lg font-medium text-white">{title}</h2>
+          </div>
+          <button type="button" className="icon-button" aria-label="Close dialog" onClick={onClose}><X size={17} /></button>
+        </div>
+        {isDelete ? <p className="mt-4 text-sm leading-6 text-slate-400">You are deleting <strong className="text-white">{name}</strong>. This removes only this {entity} and its dependent Vault records according to the existing database relationships. This cannot be undone.</p> : <div className="mt-5 space-y-3"><label className="field-label">Name<input autoFocus className="vault-input mt-2" value={name} onChange={(event) => onNameChange(event.target.value)} required maxLength={entity === "subject" ? 100 : 160} /></label>{activeDialog === "roadmap-rename" && <label className="field-label">Description<textarea className="vault-input mt-2 min-h-20" value={description} onChange={(event) => onDescriptionChange(event.target.value)} maxLength={1000} /></label>}</div>}
+        <div className="mt-6 flex justify-end gap-2"><button type="button" className="icon-button px-3 text-xs" onClick={onClose}>Cancel</button><button type="submit" className={`primary-button ${isDelete ? "bg-rose-300 text-rose-950" : ""}`} disabled={busy || (!isDelete && !name.trim())}>{busy ? "Saving..." : isDelete ? "Delete" : "Save"}</button></div>
+      </form>
+    </div>
+  );
 }
 
-function MaterialCard({ material, busy, onRename, onDelete, onShare }: { material: VaultMaterialDto; busy: boolean; onRename: (id: string, title: string) => Promise<void>; onDelete: (id: string) => Promise<void>; onShare: (id: string) => Promise<void> }) {
-  const [preview, setPreview] = useState(false); const isFile = ["pdf", "image", "handwritten_note", "document"].includes(material.kind); const resource = isFile ? `/api/vault/material/${material.id}/preview` : material.url; const downloadResource = isFile ? `/api/vault/material/${material.id}/download` : null;
-  async function download() { if (resource) return; const blob = new Blob([material.content ?? ""], { type: "text/plain" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `${material.title}.txt`; link.click(); URL.revokeObjectURL(link.href); }
-  return <article className="vault-row flex-col items-stretch"><div className="flex items-start gap-3"><MaterialIcon kind={material.kind} /><div className="min-w-0 flex-1"><h4 className="truncate text-sm text-slate-200">{material.title}</h4><p className="mt-1 line-clamp-2 text-xs text-slate-500">{material.description || material.fileName || material.content || "No description"}</p></div><span className="text-[10px] uppercase text-slate-600">{material.kind}</span></div>{preview && <Preview material={material} resource={resource} />}{resource ? <div className="flex flex-wrap gap-2 border-t border-white/10 pt-3"><button className="text-xs text-cyan-300" onClick={() => setPreview(!preview)}>{preview ? "Hide preview" : "Preview"}</button>{downloadResource ? <a className="text-xs text-cyan-300" href={downloadResource} download target="_blank" rel="noreferrer"><Download size={13} className="mr-1 inline" />Download</a> : <a className="text-xs text-cyan-300" href={resource} target="_blank" rel="noreferrer"><Globe size={13} className="mr-1 inline" />Open link</a>}<button className="text-xs text-cyan-300" disabled={busy} onClick={() => void onShare(material.id)}><Share2 size={13} className="mr-1 inline" />Share</button><button className="text-xs text-slate-400" disabled={busy} onClick={() => { const title = window.prompt("Rename material", material.title); if (title) void onRename(material.id, title); }}>Rename</button><button className="text-xs text-rose-300" disabled={busy} onClick={() => { if (window.confirm(`Delete ${material.title}?`)) void onDelete(material.id); }}><Trash2 size={13} className="mr-1 inline" />Delete</button></div> : <div className="flex flex-wrap gap-2 border-t border-white/10 pt-3"><button className="text-xs text-cyan-300" onClick={() => setPreview(!preview)}>Preview</button><button className="text-xs text-cyan-300" onClick={() => void download()}><Download size={13} className="mr-1 inline" />Download</button><button className="text-xs text-cyan-300" onClick={() => void onShare(material.id)}><Share2 size={13} className="mr-1 inline" />Share</button><button className="text-xs text-rose-300" onClick={() => { if (window.confirm(`Delete ${material.title}?`)) void onDelete(material.id); }}><Trash2 size={13} className="mr-1 inline" />Delete</button></div>}</article>;
+function MaterialComposer({
+  busy,
+  onMaterial,
+  onUpload,
+  topicId,
+}: {
+  busy: boolean;
+  onMaterial: (input: {
+    kind: "note" | "video" | "website";
+    title: string;
+    description: string;
+    url?: string;
+    content?: string;
+  }) => Promise<void>;
+  onUpload: (form: FormData) => Promise<void>;
+  topicId: string;
+}) {
+  const [kind, setKind] = useState<"note" | "video" | "website" | "file">(
+    "note",
+  );
+  const [fileKind, setFileKind] = useState<
+    "pdf" | "image" | "handwritten_note" | "document"
+  >("image");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [url, setUrl] = useState("");
+  const [content, setContent] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    if (kind === "file") {
+      if (!file) return;
+      const form = new FormData();
+      form.set("topicId", topicId);
+      form.set("title", title || file.name);
+      form.set("description", description);
+      form.set("fileKind", fileKind);
+      form.set("file", file);
+      await onUpload(form);
+    } else
+      await onMaterial({
+        kind,
+        title,
+        description,
+        url: kind === "note" ? undefined : url,
+        content: kind === "note" ? content : undefined,
+      });
+  }
+  return (
+    <form
+      className="mb-4 space-y-3 border-b border-white/10 pb-4"
+      onSubmit={submit}
+    >
+      <div className="grid gap-3 sm:grid-cols-2">
+        <label className="field-label">
+          Type
+          <select
+            className="vault-input mt-2"
+            value={kind}
+            onChange={(event) => setKind(event.target.value as typeof kind)}
+          >
+            <option value="note">Handwritten / text note</option>
+            <option value="file">File upload</option>
+            <option value="video">Video link</option>
+            <option value="website">Website link</option>
+          </select>
+        </label>
+        <Field label="Title" value={title} setValue={setTitle} required />
+      </div>
+      {kind === "file" ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="field-label">
+            File type
+            <select
+              className="vault-input mt-2"
+              value={fileKind}
+              onChange={(event) =>
+                setFileKind(event.target.value as typeof fileKind)
+              }
+            >
+              <option value="image">Image</option>
+              <option value="handwritten_note">Handwritten note</option>
+              <option value="pdf">PDF</option>
+              <option value="document">Document</option>
+            </select>
+          </label>
+          <label className="field-label">
+            File
+            <input
+              className="vault-input mt-2"
+              type="file"
+              accept="application/pdf,image/*,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv"
+              onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+              required
+            />
+          </label>
+        </div>
+      ) : kind === "note" ? (
+        <label className="field-label">
+          Note content
+          <textarea
+            className="vault-input mt-2 min-h-24"
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+            required
+          />
+        </label>
+      ) : (
+        <Field label="URL" value={url} setValue={setUrl} type="url" required />
+      )}
+      <Field
+        label="Description"
+        value={description}
+        setValue={setDescription}
+      />
+      <button className="primary-button" disabled={busy}>
+        <UploadCloud size={15} /> Save material
+      </button>
+    </form>
+  );
 }
 
-function Preview({ material, resource }: { material: VaultMaterialDto; resource: string | null }) { if (material.kind === "note") return <pre className="mt-3 max-h-40 overflow-auto whitespace-pre-wrap rounded-lg bg-black/20 p-3 text-xs leading-5 text-slate-300">{material.content}</pre>; if ((material.kind === "image" || material.kind === "handwritten_note") && resource) return <Image className="mt-3 max-h-56 w-full rounded-lg object-contain" src={resource} alt={material.title} width={800} height={450} unoptimized />; if (material.kind === "pdf" && resource) return <div className="mt-3 space-y-3"><iframe className="h-56 w-full rounded-lg border border-white/10 bg-black/20" src={resource} title={material.title} /><div className="flex flex-wrap gap-2"><a className="text-xs text-cyan-300" href={resource} target="_blank" rel="noreferrer">Open in new tab</a><a className="text-xs text-cyan-300" href={`/api/vault/material/${material.id}/download`} target="_blank" rel="noreferrer">Download PDF</a></div></div>; if ((material.kind === "website" || material.kind === "video") && resource) return <div className="mt-3 rounded-lg border border-cyan-400/20 bg-black/20 p-3 text-xs text-slate-300"><p className="text-[10px] uppercase tracking-[0.14em] text-cyan-300">{material.kind === "website" ? "Website resource" : "Video link"}</p><a className="mt-2 block break-all font-medium text-cyan-300 underline" href={resource} target="_blank" rel="noreferrer">{resource}</a><p className="mt-2 text-slate-400">{material.kind === "website" ? "This material points to an external webpage. Open it in a new tab to view the full resource." : "This material points to an external video. Open it in a new tab to watch the full resource."}</p><div className="mt-3 flex flex-wrap gap-2"><a className="text-xs text-cyan-300" href={resource} target="_blank" rel="noreferrer">Open link</a></div></div>; return <div className="mt-3 rounded-lg bg-black/20 p-3 text-xs text-slate-400">Open the linked resource to preview it.</div>; }
+function MaterialCard({
+  material,
+  busy,
+  onRename,
+  onDelete,
+  onShare,
+}: {
+  material: VaultMaterialDto;
+  busy: boolean;
+  onRename: (id: string, title: string) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+  onShare: (id: string) => Promise<void>;
+}) {
+  const [preview, setPreview] = useState(false);
+  const isFile = ["pdf", "image", "handwritten_note", "document"].includes(
+    material.kind,
+  );
+  const resource = isFile
+    ? `/api/vault/material/${material.id}/preview`
+    : material.url;
+  const downloadResource = isFile
+    ? `/api/vault/material/${material.id}/download`
+    : null;
+  async function download() {
+    if (resource) return;
+    const blob = new Blob([material.content ?? ""], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${material.title}.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+  return (
+    <article className="vault-row flex-col items-stretch">
+      <div className="flex items-start gap-3">
+        <MaterialIcon kind={material.kind} />
+        <div className="min-w-0 flex-1">
+          <h4 className="truncate text-sm text-slate-200">{material.title}</h4>
+          <p className="mt-1 line-clamp-2 text-xs text-slate-500">
+            {material.description ||
+              material.fileName ||
+              material.content ||
+              "No description"}
+          </p>
+        </div>
+        <span className="text-[10px] uppercase text-slate-600">
+          {material.kind}
+        </span>
+      </div>
+      {preview && <Preview material={material} resource={resource} />}
+      {resource ? (
+        <div className="flex flex-wrap gap-2 border-t border-white/10 pt-3">
+          <button
+            className="text-xs text-cyan-300"
+            onClick={() => setPreview(!preview)}
+          >
+            {preview ? "Hide preview" : "Preview"}
+          </button>
+          {downloadResource ? (
+            <a
+              className="text-xs text-cyan-300"
+              href={downloadResource}
+              download
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Download size={13} className="mr-1 inline" />
+              Download
+            </a>
+          ) : (
+            <a
+              className="text-xs text-cyan-300"
+              href={resource}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Globe size={13} className="mr-1 inline" />
+              Open link
+            </a>
+          )}
+          <button
+            className="text-xs text-cyan-300"
+            disabled={busy}
+            onClick={() => void onShare(material.id)}
+          >
+            <Share2 size={13} className="mr-1 inline" />
+            Share
+          </button>
+          <button
+            className="text-xs text-slate-400"
+            disabled={busy}
+            onClick={() => {
+              const title = window.prompt("Rename material", material.title);
+              if (title) void onRename(material.id, title);
+            }}
+          >
+            Rename
+          </button>
+          <button
+            className="text-xs text-rose-300"
+            disabled={busy}
+            onClick={() => {
+              if (window.confirm(`Delete ${material.title}?`))
+                void onDelete(material.id);
+            }}
+          >
+            <Trash2 size={13} className="mr-1 inline" />
+            Delete
+          </button>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-2 border-t border-white/10 pt-3">
+          <button
+            className="text-xs text-cyan-300"
+            onClick={() => setPreview(!preview)}
+          >
+            Preview
+          </button>
+          <button
+            className="text-xs text-cyan-300"
+            onClick={() => void download()}
+          >
+            <Download size={13} className="mr-1 inline" />
+            Download
+          </button>
+          <button
+            className="text-xs text-cyan-300"
+            onClick={() => void onShare(material.id)}
+          >
+            <Share2 size={13} className="mr-1 inline" />
+            Share
+          </button>
+          <button
+            className="text-xs text-rose-300"
+            onClick={() => {
+              if (window.confirm(`Delete ${material.title}?`))
+                void onDelete(material.id);
+            }}
+          >
+            <Trash2 size={13} className="mr-1 inline" />
+            Delete
+          </button>
+        </div>
+      )}
+    </article>
+  );
+}
 
-function MaterialIcon({ kind }: { kind: VaultMaterialDto["kind"] }) { return kind === "note" ? <FileText size={17} className="text-amber-300" /> : kind === "pdf" ? <FileText size={17} className="text-rose-300" /> : kind === "image" || kind === "handwritten_note" ? <ImageIcon size={17} className="text-emerald-300" /> : kind === "document" ? <FileText size={17} className="text-blue-300" /> : kind === "video" ? <Video size={17} className="text-violet-300" /> : <Globe size={17} className="text-cyan-300" />; }
-function Metric({ label, value }: { label: string; value: string }) { return <div className="metric-tile"><strong>{value}</strong><span>{label}</span></div>; }
-function Field({ label, value, setValue, type = "text", required = false }: { label: string; value: string; setValue: (value: string) => void; type?: string; required?: boolean }) { return <label className="field-label">{label}<input className="vault-input mt-2" type={type} value={value} onChange={(event) => setValue(event.target.value)} required={required} /></label>; }
-function CreateSubject({ onCreate }: { onCreate: (input: { name: string; description: string; color: string }) => void }) { const [open, setOpen] = useState(false); const [name, setName] = useState(""); const [description, setDescription] = useState(""); if (!open) return <button className="primary-button" onClick={() => setOpen(true)}><Plus size={15} /> Subject</button>; return <form className="flex gap-2" onSubmit={(event) => { event.preventDefault(); onCreate({ name, description, color: "cyan" }); setOpen(false); setName(""); setDescription(""); }}><input className="vault-input" placeholder="Subject name" value={name} onChange={(event) => setName(event.target.value)} required /><input className="vault-input hidden sm:block" placeholder="Description" value={description} onChange={(event) => setDescription(event.target.value)} /><button className="primary-button"><Plus size={15} /> Add</button></form>; }
-function CreateTopic({ subjectId, disabled, onCreate }: { subjectId: string; disabled: boolean; onCreate: (input: { subjectId: string; name: string; description: string; estimatedMinutes: number }) => void }) { const [open, setOpen] = useState(false); const [name, setName] = useState(""); const [minutes, setMinutes] = useState("60"); if (!open) return <button className="primary-button" disabled={disabled} onClick={() => setOpen(true)}><Plus size={15} /> Topic</button>; return <form className="flex gap-2" onSubmit={(event) => { event.preventDefault(); onCreate({ subjectId, name, description: "", estimatedMinutes: Number(minutes) || 0 }); setOpen(false); setName(""); }}><input className="vault-input" placeholder="Topic name" value={name} onChange={(event) => setName(event.target.value)} required /><input className="vault-input w-20" type="number" min="0" value={minutes} onChange={(event) => setMinutes(event.target.value)} /><button className="primary-button"><Plus size={15} /> Add</button></form>; }
+function Preview({
+  material,
+  resource,
+}: {
+  material: VaultMaterialDto;
+  resource: string | null;
+}) {
+  if (material.kind === "note")
+    return (
+      <pre className="mt-3 max-h-40 overflow-auto whitespace-pre-wrap rounded-lg bg-black/20 p-3 text-xs leading-5 text-slate-300">
+        {material.content}
+      </pre>
+    );
+  if (
+    (material.kind === "image" || material.kind === "handwritten_note") &&
+    resource
+  )
+    return (
+      <Image
+        className="mt-3 max-h-56 w-full rounded-lg object-contain"
+        src={resource}
+        alt={material.title}
+        width={800}
+        height={450}
+        unoptimized
+      />
+    );
+  if (material.kind === "pdf" && resource)
+    return (
+      <div className="mt-3 space-y-3">
+        <iframe
+          className="h-56 w-full rounded-lg border border-white/10 bg-black/20"
+          src={resource}
+          title={material.title}
+        />
+        <div className="flex flex-wrap gap-2">
+          <a
+            className="text-xs text-cyan-300"
+            href={resource}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open in new tab
+          </a>
+          <a
+            className="text-xs text-cyan-300"
+            href={`/api/vault/material/${material.id}/download`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Download PDF
+          </a>
+        </div>
+      </div>
+    );
+  if ((material.kind === "website" || material.kind === "video") && resource)
+    return (
+      <div className="mt-3 rounded-lg border border-cyan-400/20 bg-black/20 p-3 text-xs text-slate-300">
+        <p className="text-[10px] uppercase tracking-[0.14em] text-cyan-300">
+          {material.kind === "website" ? "Website resource" : "Video link"}
+        </p>
+        <a
+          className="mt-2 block break-all font-medium text-cyan-300 underline"
+          href={resource}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {resource}
+        </a>
+        <p className="mt-2 text-slate-400">
+          {material.kind === "website"
+            ? "This material points to an external webpage. Open it in a new tab to view the full resource."
+            : "This material points to an external video. Open it in a new tab to watch the full resource."}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a
+            className="text-xs text-cyan-300"
+            href={resource}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open link
+          </a>
+        </div>
+      </div>
+    );
+  return (
+    <div className="mt-3 rounded-lg bg-black/20 p-3 text-xs text-slate-400">
+      Open the linked resource to preview it.
+    </div>
+  );
+}
+
+function MaterialIcon({ kind }: { kind: VaultMaterialDto["kind"] }) {
+  return kind === "note" ? (
+    <FileText size={17} className="text-amber-300" />
+  ) : kind === "pdf" ? (
+    <FileText size={17} className="text-rose-300" />
+  ) : kind === "image" || kind === "handwritten_note" ? (
+    <ImageIcon size={17} className="text-emerald-300" />
+  ) : kind === "document" ? (
+    <FileText size={17} className="text-blue-300" />
+  ) : kind === "video" ? (
+    <Video size={17} className="text-violet-300" />
+  ) : (
+    <Globe size={17} className="text-cyan-300" />
+  );
+}
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="metric-tile">
+      <strong>{value}</strong>
+      <span>{label}</span>
+    </div>
+  );
+}
+function Field({
+  label,
+  value,
+  setValue,
+  type = "text",
+  required = false,
+}: {
+  label: string;
+  value: string;
+  setValue: (value: string) => void;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <label className="field-label">
+      {label}
+      <input
+        className="vault-input mt-2"
+        type={type}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        required={required}
+      />
+    </label>
+  );
+}

@@ -51,6 +51,13 @@ const roadmapSchema = z.object({
   title: z.string().trim().min(1).max(160),
   description: z.string().trim().max(1000).default(""),
 });
+const roadmapUpdateSchema = z.object({
+  id: z.string().cuid(),
+  title: z.string().trim().min(1).max(160),
+  description: z.string().trim().max(1000).default(""),
+});
+const renameSubjectSchema = z.object({ id: z.string().cuid(), name: z.string().trim().min(1).max(100) });
+const renameTopicSchema = z.object({ id: z.string().cuid(), name: z.string().trim().min(1).max(120) });
 
 function iso(value: Date) {
   return value.toISOString();
@@ -72,7 +79,7 @@ export async function getVaultData(): Promise<VaultSubjectDto[]> {
         orderBy: { updatedAt: "desc" },
         select: {
           id: true, name: true, description: true, completion: true, estimatedMinutes: true, studyMinutes: true,
-          roadmaps: { where: { userId }, orderBy: { createdAt: "asc" }, take: 50, select: { title: true } },
+          roadmaps: { where: { userId }, orderBy: { createdAt: "asc" }, take: 50, select: { id: true, title: true, description: true, progress: true } },
           materials: { where: { userId }, orderBy: { updatedAt: "desc" }, take: 100, select: { id: true, title: true, description: true, kind: true, url: true, content: true, fileKind: true, fileName: true, mimeType: true, sizeBytes: true, createdAt: true, updatedAt: true } },
         },
       },
@@ -103,7 +110,8 @@ export async function getVaultData(): Promise<VaultSubjectDto[]> {
       averageSessionMinutes: (topicStatsById.get(topic.id)?._avg.durationSeconds ?? 0) / 60,
       estimatedMinutes: topic.estimatedMinutes,
       lastStudied: topicStatsById.get(topic.id)?._max.endedAt?.toISOString() ?? null,
-      roadmap: topic.roadmaps.map((item) => item.title),
+      roadmap: topic.roadmaps.map((item) => ({ id: item.id, title: item.title, description: item.description, completed: item.progress >= 100 })),
+      roadmapProgress: topic.roadmaps.length ? Math.round(topic.roadmaps.filter((item) => item.progress >= 100).length / topic.roadmaps.length * 100) : 0,
       materials: topic.materials.map(materialDto),
     })),
   }));
@@ -116,12 +124,52 @@ export async function createSubject(input: unknown) {
   revalidatePath("/dashboard/learning-vault");
 }
 
+export async function renameSubject(input: unknown) {
+  const { userId } = await requireSession();
+  const data = renameSubjectSchema.parse(input);
+  const result = await prisma.subject.updateMany({ where: { id: data.id, userId }, data: { name: data.name } });
+  if (result.count !== 1) throw new Error("Subject not found.");
+  revalidatePath("/dashboard/learning-vault");
+}
+
+export async function deleteSubject(subjectId: string) {
+  const { userId } = await requireSession();
+  const subject = await prisma.subject.findFirst({ where: { id: subjectId, userId }, select: { id: true } });
+  if (!subject) throw new Error("Subject not found.");
+  try {
+    await prisma.subject.delete({ where: { id: subject.id } });
+  } catch {
+    throw new Error("This subject still has dependent study history or notes and cannot be deleted.");
+  }
+  revalidatePath("/dashboard/learning-vault");
+}
+
 export async function createTopic(input: unknown) {
   const { userId } = await requireSession();
   const data = topicSchema.parse(input);
   const subject = await prisma.subject.findFirst({ where: { id: data.subjectId, userId } });
   if (!subject) throw new Error("Subject not found.");
   await prisma.topic.create({ data: { userId, subjectId: subject.id, name: data.name, description: data.description, estimatedMinutes: data.estimatedMinutes, subtopics: [] } });
+  revalidatePath("/dashboard/learning-vault");
+}
+
+export async function renameTopic(input: unknown) {
+  const { userId } = await requireSession();
+  const data = renameTopicSchema.parse(input);
+  const result = await prisma.topic.updateMany({ where: { id: data.id, userId }, data: { name: data.name } });
+  if (result.count !== 1) throw new Error("Topic not found.");
+  revalidatePath("/dashboard/learning-vault");
+}
+
+export async function deleteTopic(topicId: string) {
+  const { userId } = await requireSession();
+  const topic = await prisma.topic.findFirst({ where: { id: topicId, userId }, select: { id: true } });
+  if (!topic) throw new Error("Topic not found.");
+  try {
+    await prisma.topic.delete({ where: { id: topic.id } });
+  } catch {
+    throw new Error("This topic still has dependent study history and cannot be deleted.");
+  }
   revalidatePath("/dashboard/learning-vault");
 }
 
@@ -198,6 +246,28 @@ export async function createRoadmap(input: unknown) {
   const topic = await prisma.topic.findFirst({ where: { id: data.topicId, userId } });
   if (!topic) throw new Error("Topic not found.");
   await prisma.roadmap.create({ data: { userId, subjectId: topic.subjectId, topicId: topic.id, title: data.title, description: data.description } });
+  revalidatePath("/dashboard/learning-vault");
+}
+
+export async function updateRoadmap(input: unknown) {
+  const { userId } = await requireSession();
+  const data = roadmapUpdateSchema.parse(input);
+  const result = await prisma.roadmap.updateMany({ where: { id: data.id, userId }, data: { title: data.title, description: data.description } });
+  if (result.count !== 1) throw new Error("Roadmap item not found.");
+  revalidatePath("/dashboard/learning-vault");
+}
+
+export async function deleteRoadmap(roadmapId: string) {
+  const { userId } = await requireSession();
+  const result = await prisma.roadmap.deleteMany({ where: { id: roadmapId, userId } });
+  if (result.count !== 1) throw new Error("Roadmap item not found.");
+  revalidatePath("/dashboard/learning-vault");
+}
+
+export async function setRoadmapCompleted(roadmapId: string, completed: boolean) {
+  const { userId } = await requireSession();
+  const result = await prisma.roadmap.updateMany({ where: { id: roadmapId, userId }, data: { progress: completed ? 100 : 0 } });
+  if (result.count !== 1) throw new Error("Roadmap item not found.");
   revalidatePath("/dashboard/learning-vault");
 }
 
