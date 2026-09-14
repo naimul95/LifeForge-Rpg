@@ -196,6 +196,7 @@ export type UserWhereInput = {
   habits?: Prisma.HabitListRelationFilter
   habitLogs?: Prisma.HabitLogListRelationFilter
   lifeCoinTransactions?: Prisma.LifeCoinTransactionListRelationFilter
+  inventories?: Prisma.UserInventoryListRelationFilter
   materials?: Prisma.MaterialListRelationFilter
   moods?: Prisma.MoodListRelationFilter
   notes?: Prisma.NoteListRelationFilter
@@ -231,6 +232,7 @@ export type UserOrderByWithRelationInput = {
   habits?: Prisma.HabitOrderByRelationAggregateInput
   habitLogs?: Prisma.HabitLogOrderByRelationAggregateInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionOrderByRelationAggregateInput
+  inventories?: Prisma.UserInventoryOrderByRelationAggregateInput
   materials?: Prisma.MaterialOrderByRelationAggregateInput
   moods?: Prisma.MoodOrderByRelationAggregateInput
   notes?: Prisma.NoteOrderByRelationAggregateInput
@@ -269,6 +271,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   habits?: Prisma.HabitListRelationFilter
   habitLogs?: Prisma.HabitLogListRelationFilter
   lifeCoinTransactions?: Prisma.LifeCoinTransactionListRelationFilter
+  inventories?: Prisma.UserInventoryListRelationFilter
   materials?: Prisma.MaterialListRelationFilter
   moods?: Prisma.MoodListRelationFilter
   notes?: Prisma.NoteListRelationFilter
@@ -328,6 +331,7 @@ export type UserCreateInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -363,6 +367,7 @@ export type UserUncheckedCreateInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -398,6 +403,7 @@ export type UserUpdateInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -433,6 +439,7 @@ export type UserUncheckedUpdateInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -862,6 +869,20 @@ export type UserUpdateOneRequiredWithoutLifeCoinTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLifeCoinTransactionsInput, Prisma.UserUpdateWithoutLifeCoinTransactionsInput>, Prisma.UserUncheckedUpdateWithoutLifeCoinTransactionsInput>
 }
 
+export type UserCreateNestedOneWithoutInventoriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInventoriesInput, Prisma.UserUncheckedCreateWithoutInventoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInventoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInventoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInventoriesInput, Prisma.UserUncheckedCreateWithoutInventoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInventoriesInput
+  upsert?: Prisma.UserUpsertWithoutInventoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInventoriesInput, Prisma.UserUpdateWithoutInventoriesInput>, Prisma.UserUncheckedUpdateWithoutInventoriesInput>
+}
+
 export type UserCreateNestedOneWithoutRewardClaimsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutRewardClaimsInput, Prisma.UserUncheckedCreateWithoutRewardClaimsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutRewardClaimsInput
@@ -903,6 +924,7 @@ export type UserCreateWithoutOauthAccountsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -937,6 +959,7 @@ export type UserUncheckedCreateWithoutOauthAccountsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -987,6 +1010,7 @@ export type UserUpdateWithoutOauthAccountsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -1021,6 +1045,7 @@ export type UserUncheckedUpdateWithoutOauthAccountsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -1055,6 +1080,7 @@ export type UserCreateWithoutProfileInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -1089,6 +1115,7 @@ export type UserUncheckedCreateWithoutProfileInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -1139,6 +1166,7 @@ export type UserUpdateWithoutProfileInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -1173,6 +1201,7 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -1207,6 +1236,7 @@ export type UserCreateWithoutSettingsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -1241,6 +1271,7 @@ export type UserUncheckedCreateWithoutSettingsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -1291,6 +1322,7 @@ export type UserUpdateWithoutSettingsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -1325,6 +1357,7 @@ export type UserUncheckedUpdateWithoutSettingsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -1359,6 +1392,7 @@ export type UserCreateWithoutSubjectsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -1393,6 +1427,7 @@ export type UserUncheckedCreateWithoutSubjectsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -1443,6 +1478,7 @@ export type UserUpdateWithoutSubjectsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -1477,6 +1513,7 @@ export type UserUncheckedUpdateWithoutSubjectsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -1511,6 +1548,7 @@ export type UserCreateWithoutTopicsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -1545,6 +1583,7 @@ export type UserUncheckedCreateWithoutTopicsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -1595,6 +1634,7 @@ export type UserUpdateWithoutTopicsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -1629,6 +1669,7 @@ export type UserUncheckedUpdateWithoutTopicsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -1663,6 +1704,7 @@ export type UserCreateWithoutMaterialsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1697,6 +1739,7 @@ export type UserUncheckedCreateWithoutMaterialsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1747,6 +1790,7 @@ export type UserUpdateWithoutMaterialsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1781,6 +1825,7 @@ export type UserUncheckedUpdateWithoutMaterialsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1815,6 +1860,7 @@ export type UserCreateWithoutNotesInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1849,6 +1895,7 @@ export type UserUncheckedCreateWithoutNotesInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1899,6 +1946,7 @@ export type UserUpdateWithoutNotesInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1933,6 +1981,7 @@ export type UserUncheckedUpdateWithoutNotesInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1967,6 +2016,7 @@ export type UserCreateWithoutStudySessionsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -2001,6 +2051,7 @@ export type UserUncheckedCreateWithoutStudySessionsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -2051,6 +2102,7 @@ export type UserUpdateWithoutStudySessionsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -2085,6 +2137,7 @@ export type UserUncheckedUpdateWithoutStudySessionsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -2119,6 +2172,7 @@ export type UserCreateWithoutStudyTimerStateInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -2153,6 +2207,7 @@ export type UserUncheckedCreateWithoutStudyTimerStateInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -2203,6 +2258,7 @@ export type UserUpdateWithoutStudyTimerStateInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -2237,6 +2293,7 @@ export type UserUncheckedUpdateWithoutStudyTimerStateInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -2271,6 +2328,7 @@ export type UserCreateWithoutStudyDailyStatsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -2305,6 +2363,7 @@ export type UserUncheckedCreateWithoutStudyDailyStatsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -2355,6 +2414,7 @@ export type UserUpdateWithoutStudyDailyStatsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -2389,6 +2449,7 @@ export type UserUncheckedUpdateWithoutStudyDailyStatsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -2423,6 +2484,7 @@ export type UserCreateWithoutStudyWeeklyStatsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -2457,6 +2519,7 @@ export type UserUncheckedCreateWithoutStudyWeeklyStatsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -2507,6 +2570,7 @@ export type UserUpdateWithoutStudyWeeklyStatsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -2541,6 +2605,7 @@ export type UserUncheckedUpdateWithoutStudyWeeklyStatsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -2574,6 +2639,7 @@ export type UserCreateWithoutGoalsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -2608,6 +2674,7 @@ export type UserUncheckedCreateWithoutGoalsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -2658,6 +2725,7 @@ export type UserUpdateWithoutGoalsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -2692,6 +2760,7 @@ export type UserUncheckedUpdateWithoutGoalsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -2726,6 +2795,7 @@ export type UserCreateWithoutHabitsInput = {
   goals?: Prisma.GoalCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -2760,6 +2830,7 @@ export type UserUncheckedCreateWithoutHabitsInput = {
   goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -2810,6 +2881,7 @@ export type UserUpdateWithoutHabitsInput = {
   goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -2844,6 +2916,7 @@ export type UserUncheckedUpdateWithoutHabitsInput = {
   goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -2878,6 +2951,7 @@ export type UserCreateWithoutHabitLogsInput = {
   goals?: Prisma.GoalCreateNestedManyWithoutUserInput
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -2912,6 +2986,7 @@ export type UserUncheckedCreateWithoutHabitLogsInput = {
   goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -2962,6 +3037,7 @@ export type UserUpdateWithoutHabitLogsInput = {
   goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -2996,6 +3072,7 @@ export type UserUncheckedUpdateWithoutHabitLogsInput = {
   goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -3031,6 +3108,7 @@ export type UserCreateWithoutQuestsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -3065,6 +3143,7 @@ export type UserUncheckedCreateWithoutQuestsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -3115,6 +3194,7 @@ export type UserUpdateWithoutQuestsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -3149,6 +3229,7 @@ export type UserUncheckedUpdateWithoutQuestsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -3183,6 +3264,7 @@ export type UserCreateWithoutQuestCompletionsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -3217,6 +3299,7 @@ export type UserUncheckedCreateWithoutQuestCompletionsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -3267,6 +3350,7 @@ export type UserUpdateWithoutQuestCompletionsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -3301,6 +3385,7 @@ export type UserUncheckedUpdateWithoutQuestCompletionsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -3335,6 +3420,7 @@ export type UserCreateWithoutUserAchievementsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -3369,6 +3455,7 @@ export type UserUncheckedCreateWithoutUserAchievementsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -3419,6 +3506,7 @@ export type UserUpdateWithoutUserAchievementsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -3453,6 +3541,7 @@ export type UserUncheckedUpdateWithoutUserAchievementsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -3487,6 +3576,7 @@ export type UserCreateWithoutRemindersInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -3521,6 +3611,7 @@ export type UserUncheckedCreateWithoutRemindersInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -3571,6 +3662,7 @@ export type UserUpdateWithoutRemindersInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -3605,6 +3697,7 @@ export type UserUncheckedUpdateWithoutRemindersInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -3639,6 +3732,7 @@ export type UserCreateWithoutNotificationsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -3673,6 +3767,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -3723,6 +3818,7 @@ export type UserUpdateWithoutNotificationsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -3757,6 +3853,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -3791,6 +3888,7 @@ export type UserCreateWithoutRoadmapsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -3825,6 +3923,7 @@ export type UserUncheckedCreateWithoutRoadmapsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -3875,6 +3974,7 @@ export type UserUpdateWithoutRoadmapsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -3909,6 +4009,7 @@ export type UserUncheckedUpdateWithoutRoadmapsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -3943,6 +4044,7 @@ export type UserCreateWithoutMoodsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -3977,6 +4079,7 @@ export type UserUncheckedCreateWithoutMoodsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -4027,6 +4130,7 @@ export type UserUpdateWithoutMoodsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -4061,6 +4165,7 @@ export type UserUncheckedUpdateWithoutMoodsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -4094,6 +4199,7 @@ export type UserCreateWithoutGameScoresInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -4128,6 +4234,7 @@ export type UserUncheckedCreateWithoutGameScoresInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -4178,6 +4285,7 @@ export type UserUpdateWithoutGameScoresInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -4212,6 +4320,7 @@ export type UserUncheckedUpdateWithoutGameScoresInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -4246,6 +4355,7 @@ export type UserCreateWithoutDailyChallengesInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -4280,6 +4390,7 @@ export type UserUncheckedCreateWithoutDailyChallengesInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -4330,6 +4441,7 @@ export type UserUpdateWithoutDailyChallengesInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -4364,6 +4476,7 @@ export type UserUncheckedUpdateWithoutDailyChallengesInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -4398,6 +4511,7 @@ export type UserCreateWithoutLifeCoinTransactionsInput = {
   goals?: Prisma.GoalCreateNestedManyWithoutUserInput
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -4432,6 +4546,7 @@ export type UserUncheckedCreateWithoutLifeCoinTransactionsInput = {
   goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -4482,6 +4597,7 @@ export type UserUpdateWithoutLifeCoinTransactionsInput = {
   goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -4516,6 +4632,163 @@ export type UserUncheckedUpdateWithoutLifeCoinTransactionsInput = {
   goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
+  moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  quests?: Prisma.QuestUncheckedUpdateManyWithoutUserNestedInput
+  questCompletions?: Prisma.QuestCompletionUncheckedUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
+  rewardClaims?: Prisma.RewardClaimUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  settings?: Prisma.SettingsUncheckedUpdateOneWithoutUserNestedInput
+  sharedMaterials?: Prisma.SharedMaterialUncheckedUpdateManyWithoutUserNestedInput
+  studyDailyStats?: Prisma.StudyDailyStatUncheckedUpdateManyWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  studyTimerState?: Prisma.StudyTimerStateUncheckedUpdateOneWithoutUserNestedInput
+  studyWeeklyStats?: Prisma.StudyWeeklyStatUncheckedUpdateManyWithoutUserNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutUserNestedInput
+  topics?: Prisma.TopicUncheckedUpdateManyWithoutUserNestedInput
+  userAchievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInventoriesInput = {
+  id?: string
+  email: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dailyChallenges?: Prisma.DailyChallengeCreateNestedManyWithoutUserInput
+  gameScores?: Prisma.GameScoreCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
+  lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
+  moods?: Prisma.MoodCreateNestedManyWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  quests?: Prisma.QuestCreateNestedManyWithoutUserInput
+  questCompletions?: Prisma.QuestCompletionCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
+  rewardClaims?: Prisma.RewardClaimCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  settings?: Prisma.SettingsCreateNestedOneWithoutUserInput
+  sharedMaterials?: Prisma.SharedMaterialCreateNestedManyWithoutUserInput
+  studyDailyStats?: Prisma.StudyDailyStatCreateNestedManyWithoutUserInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  studyTimerState?: Prisma.StudyTimerStateCreateNestedOneWithoutUserInput
+  studyWeeklyStats?: Prisma.StudyWeeklyStatCreateNestedManyWithoutUserInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutUserInput
+  topics?: Prisma.TopicCreateNestedManyWithoutUserInput
+  userAchievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInventoriesInput = {
+  id?: string
+  email: string
+  displayName?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dailyChallenges?: Prisma.DailyChallengeUncheckedCreateNestedManyWithoutUserInput
+  gameScores?: Prisma.GameScoreUncheckedCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
+  lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
+  moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  quests?: Prisma.QuestUncheckedCreateNestedManyWithoutUserInput
+  questCompletions?: Prisma.QuestCompletionUncheckedCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
+  rewardClaims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  settings?: Prisma.SettingsUncheckedCreateNestedOneWithoutUserInput
+  sharedMaterials?: Prisma.SharedMaterialUncheckedCreateNestedManyWithoutUserInput
+  studyDailyStats?: Prisma.StudyDailyStatUncheckedCreateNestedManyWithoutUserInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  studyTimerState?: Prisma.StudyTimerStateUncheckedCreateNestedOneWithoutUserInput
+  studyWeeklyStats?: Prisma.StudyWeeklyStatUncheckedCreateNestedManyWithoutUserInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutUserInput
+  topics?: Prisma.TopicUncheckedCreateNestedManyWithoutUserInput
+  userAchievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInventoriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInventoriesInput, Prisma.UserUncheckedCreateWithoutInventoriesInput>
+}
+
+export type UserUpsertWithoutInventoriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInventoriesInput, Prisma.UserUncheckedUpdateWithoutInventoriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInventoriesInput, Prisma.UserUncheckedCreateWithoutInventoriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInventoriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInventoriesInput, Prisma.UserUncheckedUpdateWithoutInventoriesInput>
+}
+
+export type UserUpdateWithoutInventoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dailyChallenges?: Prisma.DailyChallengeUpdateManyWithoutUserNestedInput
+  gameScores?: Prisma.GameScoreUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
+  lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
+  moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  quests?: Prisma.QuestUpdateManyWithoutUserNestedInput
+  questCompletions?: Prisma.QuestCompletionUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
+  rewardClaims?: Prisma.RewardClaimUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  settings?: Prisma.SettingsUpdateOneWithoutUserNestedInput
+  sharedMaterials?: Prisma.SharedMaterialUpdateManyWithoutUserNestedInput
+  studyDailyStats?: Prisma.StudyDailyStatUpdateManyWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  studyTimerState?: Prisma.StudyTimerStateUpdateOneWithoutUserNestedInput
+  studyWeeklyStats?: Prisma.StudyWeeklyStatUpdateManyWithoutUserNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutUserNestedInput
+  topics?: Prisma.TopicUpdateManyWithoutUserNestedInput
+  userAchievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInventoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dailyChallenges?: Prisma.DailyChallengeUncheckedUpdateManyWithoutUserNestedInput
+  gameScores?: Prisma.GameScoreUncheckedUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
+  lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -4551,6 +4824,7 @@ export type UserCreateWithoutRewardClaimsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -4585,6 +4859,7 @@ export type UserUncheckedCreateWithoutRewardClaimsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -4635,6 +4910,7 @@ export type UserUpdateWithoutRewardClaimsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -4669,6 +4945,7 @@ export type UserUncheckedUpdateWithoutRewardClaimsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -4703,6 +4980,7 @@ export type UserCreateWithoutSharedMaterialsInput = {
   habits?: Prisma.HabitCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
@@ -4737,6 +5015,7 @@ export type UserUncheckedCreateWithoutSharedMaterialsInput = {
   habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
   habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  inventories?: Prisma.UserInventoryUncheckedCreateNestedManyWithoutUserInput
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutUserInput
   moods?: Prisma.MoodUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
@@ -4787,6 +5066,7 @@ export type UserUpdateWithoutSharedMaterialsInput = {
   habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
@@ -4821,6 +5101,7 @@ export type UserUncheckedUpdateWithoutSharedMaterialsInput = {
   habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
   habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
   lifeCoinTransactions?: Prisma.LifeCoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  inventories?: Prisma.UserInventoryUncheckedUpdateManyWithoutUserNestedInput
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutUserNestedInput
   moods?: Prisma.MoodUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
@@ -4854,6 +5135,7 @@ export type UserCountOutputType = {
   habits: number
   habitLogs: number
   lifeCoinTransactions: number
+  inventories: number
   materials: number
   moods: number
   notes: number
@@ -4880,6 +5162,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   habits?: boolean | UserCountOutputTypeCountHabitsArgs
   habitLogs?: boolean | UserCountOutputTypeCountHabitLogsArgs
   lifeCoinTransactions?: boolean | UserCountOutputTypeCountLifeCoinTransactionsArgs
+  inventories?: boolean | UserCountOutputTypeCountInventoriesArgs
   materials?: boolean | UserCountOutputTypeCountMaterialsArgs
   moods?: boolean | UserCountOutputTypeCountMoodsArgs
   notes?: boolean | UserCountOutputTypeCountNotesArgs
@@ -4949,6 +5232,13 @@ export type UserCountOutputTypeCountHabitLogsArgs<ExtArgs extends runtime.Types.
  */
 export type UserCountOutputTypeCountLifeCoinTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LifeCoinTransactionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInventoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserInventoryWhereInput
 }
 
 /**
@@ -5084,6 +5374,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   habits?: boolean | Prisma.User$habitsArgs<ExtArgs>
   habitLogs?: boolean | Prisma.User$habitLogsArgs<ExtArgs>
   lifeCoinTransactions?: boolean | Prisma.User$lifeCoinTransactionsArgs<ExtArgs>
+  inventories?: boolean | Prisma.User$inventoriesArgs<ExtArgs>
   materials?: boolean | Prisma.User$materialsArgs<ExtArgs>
   moods?: boolean | Prisma.User$moodsArgs<ExtArgs>
   notes?: boolean | Prisma.User$notesArgs<ExtArgs>
@@ -5142,6 +5433,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   habits?: boolean | Prisma.User$habitsArgs<ExtArgs>
   habitLogs?: boolean | Prisma.User$habitLogsArgs<ExtArgs>
   lifeCoinTransactions?: boolean | Prisma.User$lifeCoinTransactionsArgs<ExtArgs>
+  inventories?: boolean | Prisma.User$inventoriesArgs<ExtArgs>
   materials?: boolean | Prisma.User$materialsArgs<ExtArgs>
   moods?: boolean | Prisma.User$moodsArgs<ExtArgs>
   notes?: boolean | Prisma.User$notesArgs<ExtArgs>
@@ -5176,6 +5468,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     habits: Prisma.$HabitPayload<ExtArgs>[]
     habitLogs: Prisma.$HabitLogPayload<ExtArgs>[]
     lifeCoinTransactions: Prisma.$LifeCoinTransactionPayload<ExtArgs>[]
+    inventories: Prisma.$UserInventoryPayload<ExtArgs>[]
     materials: Prisma.$MaterialPayload<ExtArgs>[]
     moods: Prisma.$MoodPayload<ExtArgs>[]
     notes: Prisma.$NotePayload<ExtArgs>[]
@@ -5604,6 +5897,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   habits<T extends Prisma.User$habitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$habitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HabitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   habitLogs<T extends Prisma.User$habitLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$habitLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HabitLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lifeCoinTransactions<T extends Prisma.User$lifeCoinTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lifeCoinTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LifeCoinTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inventories<T extends Prisma.User$inventoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserInventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   materials<T extends Prisma.User$materialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$materialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   moods<T extends Prisma.User$moodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moodsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MoodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notes<T extends Prisma.User$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6193,6 +6487,30 @@ export type User$lifeCoinTransactionsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.LifeCoinTransactionScalarFieldEnum | Prisma.LifeCoinTransactionScalarFieldEnum[]
+}
+
+/**
+ * User.inventories
+ */
+export type User$inventoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserInventory
+   */
+  select?: Prisma.UserInventorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserInventory
+   */
+  omit?: Prisma.UserInventoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInventoryInclude<ExtArgs> | null
+  where?: Prisma.UserInventoryWhereInput
+  orderBy?: Prisma.UserInventoryOrderByWithRelationInput | Prisma.UserInventoryOrderByWithRelationInput[]
+  cursor?: Prisma.UserInventoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserInventoryScalarFieldEnum | Prisma.UserInventoryScalarFieldEnum[]
 }
 
 /**

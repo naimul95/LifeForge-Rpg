@@ -77,6 +77,8 @@ export const ModelName = {
   GameScore: 'GameScore',
   DailyChallenge: 'DailyChallenge',
   LifeCoinTransaction: 'LifeCoinTransaction',
+  ShopItem: 'ShopItem',
+  UserInventory: 'UserInventory',
   RewardClaim: 'RewardClaim',
   SharedMaterial: 'SharedMaterial'
 } as const
@@ -338,7 +340,9 @@ export const HabitScalarFieldEnum = {
   reminder: 'reminder',
   selectedDays: 'selectedDays',
   startDate: 'startDate',
-  target: 'target'
+  target: 'target',
+  currentStreak: 'currentStreak',
+  bestStreak: 'bestStreak'
 } as const
 
 export type HabitScalarFieldEnum = (typeof HabitScalarFieldEnum)[keyof typeof HabitScalarFieldEnum]
@@ -507,6 +511,34 @@ export const LifeCoinTransactionScalarFieldEnum = {
 } as const
 
 export type LifeCoinTransactionScalarFieldEnum = (typeof LifeCoinTransactionScalarFieldEnum)[keyof typeof LifeCoinTransactionScalarFieldEnum]
+
+
+export const ShopItemScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  price: 'price',
+  previewUrl: 'previewUrl',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShopItemScalarFieldEnum = (typeof ShopItemScalarFieldEnum)[keyof typeof ShopItemScalarFieldEnum]
+
+
+export const UserInventoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  itemId: 'itemId',
+  equippedAt: 'equippedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserInventoryScalarFieldEnum = (typeof UserInventoryScalarFieldEnum)[keyof typeof UserInventoryScalarFieldEnum]
 
 
 export const RewardClaimScalarFieldEnum = {

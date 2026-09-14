@@ -4,6 +4,7 @@ import { Bell, ChevronDown, LoaderCircle, LogOut, Menu, Search, Settings2, Spark
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { dismissReminder, getDueReminders } from "@/actions/planning.actions";
 
 type SearchResult = { id: string; type: "Subject" | "Topic" | "Material" | "Note" | "Goal" | "Habit" | "Mission"; title: string; detail: string; destination: string };
 
@@ -23,12 +24,29 @@ export function Header({ user, activeItem, onSelect, onMenuOpen }: HeaderProps) 
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [dueReminder, setDueReminder] = useState<{ id: string; title: string; description: string; remindAt: Date } | null>(null);
   const searchRequest = useRef(0);
   const searchTimer = useRef<number | null>(null);
   async function signOutUser() { await fetch("/api/auth/logout", { method: "POST" }); router.push("/"); }
 
   useEffect(() => () => {
     if (searchTimer.current) window.clearTimeout(searchTimer.current);
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const checkReminders = async () => {
+      try {
+        const reminders = await getDueReminders();
+        const reminder = reminders[0];
+        if (!active || !reminder) return;
+        setDueReminder(reminder);
+        if (typeof Notification !== "undefined" && Notification.permission === "granted") new Notification(`LifeForge: ${reminder.title}`, { body: reminder.description || "Your reminder is due." });
+      } catch { /* Reminder checks must not interrupt navigation. */ }
+    };
+    void checkReminders();
+    const timer = window.setInterval(() => void checkReminders(), 60_000);
+    return () => { active = false; window.clearInterval(timer); };
   }, []);
 
   function triggerSearch(nextQuery: string) {
@@ -85,6 +103,7 @@ export function Header({ user, activeItem, onSelect, onMenuOpen }: HeaderProps) 
         </div>}
       </div>
       <div className="ml-auto flex items-center gap-2 sm:gap-4">
+        {dueReminder && <div className="reminder-alert" role="alert"><Bell size={15} className="text-amber-300" /><div className="min-w-0"><strong>{dueReminder.title}</strong><span>{dueReminder.description || "It's time to take action."}</span></div><button type="button" aria-label="Dismiss reminder" onClick={() => { void dismissReminder(dueReminder.id); setDueReminder(null); }}>Dismiss</button></div>}
         <button aria-label="Open settings" className="header-icon" onClick={() => onSelect("Settings")}><Settings2 size={18} /></button>
         <div className="relative">
           <button aria-label="Open notifications" className="header-icon" onClick={() => setNotificationsOpen(!notificationsOpen)}>

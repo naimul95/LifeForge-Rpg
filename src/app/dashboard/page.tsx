@@ -3,8 +3,6 @@ import { BookOpen, Brain, Clock3, Flame, Sparkles, Target, Trophy, Zap } from "l
 
 import { getAnalyticsDashboardData } from "@/actions/analytics.actions";
 
-export const dynamic = "force-dynamic";
-
 export default async function DashboardPage() {
   const data = await getAnalyticsDashboardData();
   const totalStudyMinutes = Math.round(data.weekly.reduce((sum, item) => sum + item.studyMinutes, 0));
@@ -13,15 +11,15 @@ export default async function DashboardPage() {
   const topSubject = data.subjects[0];
   const topTopic = data.topics[0];
   const nextRoadmap = data.roadmap[0];
-  const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const dhakaHour = Number(new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Dhaka", hour: "2-digit", hour12: false }).format(new Date()));
+  const greeting = dhakaHour >= 5 && dhakaHour < 12 ? "Good morning" : dhakaHour >= 12 && dhakaHour < 17 ? "Good afternoon" : dhakaHour >= 17 && dhakaHour < 21 ? "Good evening" : "Good night";
 
   return (
     <main className="mx-auto max-w-375 px-5 pb-28 pt-7 sm:px-8 lg:px-10 lg:pb-10">
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="eyebrow text-cyan-300">Command center</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{greeting}</h1>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{greeting}, {data.userName ?? "there"}</h1>
         </div>
         <p className="text-sm text-slate-500">Your momentum, pulled from real data.</p>
       </div>

@@ -28,10 +28,14 @@ export type AggregateHabit = {
 
 export type HabitAvgAggregateOutputType = {
   target: number | null
+  currentStreak: number | null
+  bestStreak: number | null
 }
 
 export type HabitSumAggregateOutputType = {
   target: number | null
+  currentStreak: number | null
+  bestStreak: number | null
 }
 
 export type HabitMinAggregateOutputType = {
@@ -49,6 +53,8 @@ export type HabitMinAggregateOutputType = {
   reminder: string | null
   startDate: Date | null
   target: number | null
+  currentStreak: number | null
+  bestStreak: number | null
 }
 
 export type HabitMaxAggregateOutputType = {
@@ -66,6 +72,8 @@ export type HabitMaxAggregateOutputType = {
   reminder: string | null
   startDate: Date | null
   target: number | null
+  currentStreak: number | null
+  bestStreak: number | null
 }
 
 export type HabitCountAggregateOutputType = {
@@ -84,16 +92,22 @@ export type HabitCountAggregateOutputType = {
   selectedDays: number
   startDate: number
   target: number
+  currentStreak: number
+  bestStreak: number
   _all: number
 }
 
 
 export type HabitAvgAggregateInputType = {
   target?: true
+  currentStreak?: true
+  bestStreak?: true
 }
 
 export type HabitSumAggregateInputType = {
   target?: true
+  currentStreak?: true
+  bestStreak?: true
 }
 
 export type HabitMinAggregateInputType = {
@@ -111,6 +125,8 @@ export type HabitMinAggregateInputType = {
   reminder?: true
   startDate?: true
   target?: true
+  currentStreak?: true
+  bestStreak?: true
 }
 
 export type HabitMaxAggregateInputType = {
@@ -128,6 +144,8 @@ export type HabitMaxAggregateInputType = {
   reminder?: true
   startDate?: true
   target?: true
+  currentStreak?: true
+  bestStreak?: true
 }
 
 export type HabitCountAggregateInputType = {
@@ -146,6 +164,8 @@ export type HabitCountAggregateInputType = {
   selectedDays?: true
   startDate?: true
   target?: true
+  currentStreak?: true
+  bestStreak?: true
   _all?: true
 }
 
@@ -251,6 +271,8 @@ export type HabitGroupByOutputType = {
   selectedDays: runtime.JsonValue
   startDate: Date
   target: number
+  currentStreak: number
+  bestStreak: number
   _count: HabitCountAggregateOutputType | null
   _avg: HabitAvgAggregateOutputType | null
   _sum: HabitSumAggregateOutputType | null
@@ -292,6 +314,8 @@ export type HabitWhereInput = {
   selectedDays?: Prisma.JsonFilter<"Habit">
   startDate?: Prisma.DateTimeFilter<"Habit"> | Date | string
   target?: Prisma.IntFilter<"Habit"> | number
+  currentStreak?: Prisma.IntFilter<"Habit"> | number
+  bestStreak?: Prisma.IntFilter<"Habit"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   logs?: Prisma.HabitLogListRelationFilter
 }
@@ -312,6 +336,8 @@ export type HabitOrderByWithRelationInput = {
   selectedDays?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   target?: Prisma.SortOrder
+  currentStreak?: Prisma.SortOrder
+  bestStreak?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   logs?: Prisma.HabitLogOrderByRelationAggregateInput
 }
@@ -336,6 +362,8 @@ export type HabitWhereUniqueInput = Prisma.AtLeast<{
   selectedDays?: Prisma.JsonFilter<"Habit">
   startDate?: Prisma.DateTimeFilter<"Habit"> | Date | string
   target?: Prisma.IntFilter<"Habit"> | number
+  currentStreak?: Prisma.IntFilter<"Habit"> | number
+  bestStreak?: Prisma.IntFilter<"Habit"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   logs?: Prisma.HabitLogListRelationFilter
 }, "id" | "id_userId">
@@ -356,6 +384,8 @@ export type HabitOrderByWithAggregationInput = {
   selectedDays?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   target?: Prisma.SortOrder
+  currentStreak?: Prisma.SortOrder
+  bestStreak?: Prisma.SortOrder
   _count?: Prisma.HabitCountOrderByAggregateInput
   _avg?: Prisma.HabitAvgOrderByAggregateInput
   _max?: Prisma.HabitMaxOrderByAggregateInput
@@ -382,6 +412,8 @@ export type HabitScalarWhereWithAggregatesInput = {
   selectedDays?: Prisma.JsonWithAggregatesFilter<"Habit">
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Habit"> | Date | string
   target?: Prisma.IntWithAggregatesFilter<"Habit"> | number
+  currentStreak?: Prisma.IntWithAggregatesFilter<"Habit"> | number
+  bestStreak?: Prisma.IntWithAggregatesFilter<"Habit"> | number
 }
 
 export type HabitCreateInput = {
@@ -399,6 +431,8 @@ export type HabitCreateInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
   user: Prisma.UserCreateNestedOneWithoutHabitsInput
   logs?: Prisma.HabitLogCreateNestedManyWithoutHabitInput
 }
@@ -419,6 +453,8 @@ export type HabitUncheckedCreateInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
   logs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutHabitInput
 }
 
@@ -437,6 +473,8 @@ export type HabitUpdateInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutHabitsNestedInput
   logs?: Prisma.HabitLogUpdateManyWithoutHabitNestedInput
 }
@@ -457,6 +495,8 @@ export type HabitUncheckedUpdateInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
   logs?: Prisma.HabitLogUncheckedUpdateManyWithoutHabitNestedInput
 }
 
@@ -476,6 +516,8 @@ export type HabitCreateManyInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
 }
 
 export type HabitUpdateManyMutationInput = {
@@ -493,6 +535,8 @@ export type HabitUpdateManyMutationInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type HabitUncheckedUpdateManyInput = {
@@ -511,6 +555,8 @@ export type HabitUncheckedUpdateManyInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type HabitListRelationFilter = {
@@ -544,10 +590,14 @@ export type HabitCountOrderByAggregateInput = {
   selectedDays?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   target?: Prisma.SortOrder
+  currentStreak?: Prisma.SortOrder
+  bestStreak?: Prisma.SortOrder
 }
 
 export type HabitAvgOrderByAggregateInput = {
   target?: Prisma.SortOrder
+  currentStreak?: Prisma.SortOrder
+  bestStreak?: Prisma.SortOrder
 }
 
 export type HabitMaxOrderByAggregateInput = {
@@ -565,6 +615,8 @@ export type HabitMaxOrderByAggregateInput = {
   reminder?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   target?: Prisma.SortOrder
+  currentStreak?: Prisma.SortOrder
+  bestStreak?: Prisma.SortOrder
 }
 
 export type HabitMinOrderByAggregateInput = {
@@ -582,10 +634,14 @@ export type HabitMinOrderByAggregateInput = {
   reminder?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   target?: Prisma.SortOrder
+  currentStreak?: Prisma.SortOrder
+  bestStreak?: Prisma.SortOrder
 }
 
 export type HabitSumOrderByAggregateInput = {
   target?: Prisma.SortOrder
+  currentStreak?: Prisma.SortOrder
+  bestStreak?: Prisma.SortOrder
 }
 
 export type HabitScalarRelationFilter = {
@@ -672,6 +728,8 @@ export type HabitCreateWithoutUserInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
   logs?: Prisma.HabitLogCreateNestedManyWithoutHabitInput
 }
 
@@ -690,6 +748,8 @@ export type HabitUncheckedCreateWithoutUserInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
   logs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutHabitInput
 }
 
@@ -738,6 +798,8 @@ export type HabitScalarWhereInput = {
   selectedDays?: Prisma.JsonFilter<"Habit">
   startDate?: Prisma.DateTimeFilter<"Habit"> | Date | string
   target?: Prisma.IntFilter<"Habit"> | number
+  currentStreak?: Prisma.IntFilter<"Habit"> | number
+  bestStreak?: Prisma.IntFilter<"Habit"> | number
 }
 
 export type HabitCreateWithoutLogsInput = {
@@ -755,6 +817,8 @@ export type HabitCreateWithoutLogsInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
   user: Prisma.UserCreateNestedOneWithoutHabitsInput
 }
 
@@ -774,6 +838,8 @@ export type HabitUncheckedCreateWithoutLogsInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
 }
 
 export type HabitCreateOrConnectWithoutLogsInput = {
@@ -807,6 +873,8 @@ export type HabitUpdateWithoutLogsInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutHabitsNestedInput
 }
 
@@ -826,6 +894,8 @@ export type HabitUncheckedUpdateWithoutLogsInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type HabitCreateManyUserInput = {
@@ -843,6 +913,8 @@ export type HabitCreateManyUserInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Date | string
   target?: number
+  currentStreak?: number
+  bestStreak?: number
 }
 
 export type HabitUpdateWithoutUserInput = {
@@ -860,6 +932,8 @@ export type HabitUpdateWithoutUserInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
   logs?: Prisma.HabitLogUpdateManyWithoutHabitNestedInput
 }
 
@@ -878,6 +952,8 @@ export type HabitUncheckedUpdateWithoutUserInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
   logs?: Prisma.HabitLogUncheckedUpdateManyWithoutHabitNestedInput
 }
 
@@ -896,6 +972,8 @@ export type HabitUncheckedUpdateManyWithoutUserInput = {
   selectedDays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   target?: Prisma.IntFieldUpdateOperationsInput | number
+  currentStreak?: Prisma.IntFieldUpdateOperationsInput | number
+  bestStreak?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -945,6 +1023,8 @@ export type HabitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   selectedDays?: boolean
   startDate?: boolean
   target?: boolean
+  currentStreak?: boolean
+  bestStreak?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   logs?: boolean | Prisma.Habit$logsArgs<ExtArgs>
   _count?: boolean | Prisma.HabitCountOutputTypeDefaultArgs<ExtArgs>
@@ -966,6 +1046,8 @@ export type HabitSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   selectedDays?: boolean
   startDate?: boolean
   target?: boolean
+  currentStreak?: boolean
+  bestStreak?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["habit"]>
 
@@ -985,6 +1067,8 @@ export type HabitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   selectedDays?: boolean
   startDate?: boolean
   target?: boolean
+  currentStreak?: boolean
+  bestStreak?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["habit"]>
 
@@ -1004,9 +1088,11 @@ export type HabitSelectScalar = {
   selectedDays?: boolean
   startDate?: boolean
   target?: boolean
+  currentStreak?: boolean
+  bestStreak?: boolean
 }
 
-export type HabitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "polarity" | "color" | "active" | "createdAt" | "updatedAt" | "description" | "endDate" | "frequency" | "reminder" | "selectedDays" | "startDate" | "target", ExtArgs["result"]["habit"]>
+export type HabitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "polarity" | "color" | "active" | "createdAt" | "updatedAt" | "description" | "endDate" | "frequency" | "reminder" | "selectedDays" | "startDate" | "target" | "currentStreak" | "bestStreak", ExtArgs["result"]["habit"]>
 export type HabitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   logs?: boolean | Prisma.Habit$logsArgs<ExtArgs>
@@ -1041,6 +1127,8 @@ export type $HabitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     selectedDays: runtime.JsonValue
     startDate: Date
     target: number
+    currentStreak: number
+    bestStreak: number
   }, ExtArgs["result"]["habit"]>
   composites: {}
 }
@@ -1481,6 +1569,8 @@ export interface HabitFieldRefs {
   readonly selectedDays: Prisma.FieldRef<"Habit", 'Json'>
   readonly startDate: Prisma.FieldRef<"Habit", 'DateTime'>
   readonly target: Prisma.FieldRef<"Habit", 'Int'>
+  readonly currentStreak: Prisma.FieldRef<"Habit", 'Int'>
+  readonly bestStreak: Prisma.FieldRef<"Habit", 'Int'>
 }
     
 

@@ -518,6 +518,23 @@ export type EnumMoodLevelWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumMoodLevelFilter<$PrismaModel>
 }
 
+export type EnumLifeCoinItemTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LifeCoinItemType | Prisma.EnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLifeCoinItemTypeFilter<$PrismaModel> | $Enums.LifeCoinItemType
+}
+
+export type EnumLifeCoinItemTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LifeCoinItemType | Prisma.EnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLifeCoinItemTypeWithAggregatesFilter<$PrismaModel> | $Enums.LifeCoinItemType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLifeCoinItemTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLifeCoinItemTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -995,6 +1012,23 @@ export type NestedEnumMoodLevelWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMoodLevelFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMoodLevelFilter<$PrismaModel>
+}
+
+export type NestedEnumLifeCoinItemTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LifeCoinItemType | Prisma.EnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLifeCoinItemTypeFilter<$PrismaModel> | $Enums.LifeCoinItemType
+}
+
+export type NestedEnumLifeCoinItemTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LifeCoinItemType | Prisma.EnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LifeCoinItemType[] | Prisma.ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLifeCoinItemTypeWithAggregatesFilter<$PrismaModel> | $Enums.LifeCoinItemType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLifeCoinItemTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLifeCoinItemTypeFilter<$PrismaModel>
 }
 
 

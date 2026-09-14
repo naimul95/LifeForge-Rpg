@@ -329,7 +329,6 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="xp-chip"><Zap size={12} /> {data.profile.xp.toLocaleString("en-US")} XP</span>
-                <span className="coin-chip">{data.profile.coins.toLocaleString("en-US")} Life Coins</span>
               </div>
 
               <div className="mt-4 flex justify-between text-xs text-slate-500">

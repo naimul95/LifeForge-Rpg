@@ -172,6 +172,16 @@ export type DailyChallenge = Prisma.DailyChallengeModel
  */
 export type LifeCoinTransaction = Prisma.LifeCoinTransactionModel
 /**
+ * Model ShopItem
+ * 
+ */
+export type ShopItem = Prisma.ShopItemModel
+/**
+ * Model UserInventory
+ * 
+ */
+export type UserInventory = Prisma.UserInventoryModel
+/**
  * Model RewardClaim
  * 
  */

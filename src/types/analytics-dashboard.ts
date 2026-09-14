@@ -1,4 +1,5 @@
 export interface AnalyticsDashboardData {
+  userName: string | null;
   weekly: Array<{ label: string; studyMinutes: number; xp: number; habitCompletions: number }>;
   heatmap: Array<{ date: string; minutes: number }>;
   subjects: Array<{ name: string; progress: number; studyMinutes: number }>;

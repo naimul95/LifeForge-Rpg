@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Activity, Check, Coins, Plus, Shield, Sparkles, Target, Trash2, Trophy, Zap } from "lucide-react";
+import { Activity, Check, Plus, Shield, Sparkles, Target, Trash2, Trophy, Zap } from "lucide-react";
 
 import { completeDailyChallenge, completeQuest, createQuest, deleteQuest, getRpgDashboardData } from "@/actions/rpg.actions";
 import type { RpgDashboardData } from "@/types/rpg-dashboard";
@@ -58,7 +58,6 @@ export function RpgDashboard({ initialData }: { initialData: RpgDashboardData })
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap gap-2">
             <span className="xp-chip"><Zap size={12} /> {data.profile.xp.toLocaleString("en-US")} XP</span>
-            <span className="coin-chip"><Coins size={12} /> {data.profile.coins.toLocaleString("en-US")} Life Coins</span>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">

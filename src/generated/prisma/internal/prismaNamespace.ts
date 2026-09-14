@@ -423,6 +423,8 @@ export const ModelName = {
   GameScore: 'GameScore',
   DailyChallenge: 'DailyChallenge',
   LifeCoinTransaction: 'LifeCoinTransaction',
+  ShopItem: 'ShopItem',
+  UserInventory: 'UserInventory',
   RewardClaim: 'RewardClaim',
   SharedMaterial: 'SharedMaterial'
 } as const
@@ -440,7 +442,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "oAuthAccount" | "profile" | "settings" | "subject" | "topic" | "material" | "note" | "studySession" | "studyTimerState" | "studyDailyStat" | "studyWeeklyStat" | "goal" | "habit" | "habitLog" | "quest" | "questCompletion" | "achievement" | "userAchievement" | "reminder" | "notification" | "roadmap" | "mood" | "gameScore" | "dailyChallenge" | "lifeCoinTransaction" | "rewardClaim" | "sharedMaterial"
+    modelProps: "user" | "oAuthAccount" | "profile" | "settings" | "subject" | "topic" | "material" | "note" | "studySession" | "studyTimerState" | "studyDailyStat" | "studyWeeklyStat" | "goal" | "habit" | "habitLog" | "quest" | "questCompletion" | "achievement" | "userAchievement" | "reminder" | "notification" | "roadmap" | "mood" | "gameScore" | "dailyChallenge" | "lifeCoinTransaction" | "shopItem" | "userInventory" | "rewardClaim" | "sharedMaterial"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2368,6 +2370,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ShopItem: {
+      payload: Prisma.$ShopItemPayload<ExtArgs>
+      fields: Prisma.ShopItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ShopItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ShopItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>
+        }
+        findFirst: {
+          args: Prisma.ShopItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ShopItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>
+        }
+        findMany: {
+          args: Prisma.ShopItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>[]
+        }
+        create: {
+          args: Prisma.ShopItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>
+        }
+        createMany: {
+          args: Prisma.ShopItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ShopItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>[]
+        }
+        delete: {
+          args: Prisma.ShopItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>
+        }
+        update: {
+          args: Prisma.ShopItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.ShopItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ShopItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ShopItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.ShopItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShopItemPayload>
+        }
+        aggregate: {
+          args: Prisma.ShopItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateShopItem>
+        }
+        groupBy: {
+          args: Prisma.ShopItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ShopItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ShopItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ShopItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserInventory: {
+      payload: Prisma.$UserInventoryPayload<ExtArgs>
+      fields: Prisma.UserInventoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserInventoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserInventoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>
+        }
+        findFirst: {
+          args: Prisma.UserInventoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserInventoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>
+        }
+        findMany: {
+          args: Prisma.UserInventoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>[]
+        }
+        create: {
+          args: Prisma.UserInventoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>
+        }
+        createMany: {
+          args: Prisma.UserInventoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserInventoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>[]
+        }
+        delete: {
+          args: Prisma.UserInventoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>
+        }
+        update: {
+          args: Prisma.UserInventoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserInventoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserInventoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserInventoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserInventoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserInventoryPayload>
+        }
+        aggregate: {
+          args: Prisma.UserInventoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserInventory>
+        }
+        groupBy: {
+          args: Prisma.UserInventoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserInventoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserInventoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserInventoryCountAggregateOutputType> | number
+        }
+      }
+    }
     RewardClaim: {
       payload: Prisma.$RewardClaimPayload<ExtArgs>
       fields: Prisma.RewardClaimFieldRefs
@@ -2796,7 +2946,9 @@ export const HabitScalarFieldEnum = {
   reminder: 'reminder',
   selectedDays: 'selectedDays',
   startDate: 'startDate',
-  target: 'target'
+  target: 'target',
+  currentStreak: 'currentStreak',
+  bestStreak: 'bestStreak'
 } as const
 
 export type HabitScalarFieldEnum = (typeof HabitScalarFieldEnum)[keyof typeof HabitScalarFieldEnum]
@@ -2965,6 +3117,34 @@ export const LifeCoinTransactionScalarFieldEnum = {
 } as const
 
 export type LifeCoinTransactionScalarFieldEnum = (typeof LifeCoinTransactionScalarFieldEnum)[keyof typeof LifeCoinTransactionScalarFieldEnum]
+
+
+export const ShopItemScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  price: 'price',
+  previewUrl: 'previewUrl',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShopItemScalarFieldEnum = (typeof ShopItemScalarFieldEnum)[keyof typeof ShopItemScalarFieldEnum]
+
+
+export const UserInventoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  itemId: 'itemId',
+  equippedAt: 'equippedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserInventoryScalarFieldEnum = (typeof UserInventoryScalarFieldEnum)[keyof typeof UserInventoryScalarFieldEnum]
 
 
 export const RewardClaimScalarFieldEnum = {
@@ -3313,6 +3493,20 @@ export type EnumMoodLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 export type ListEnumMoodLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MoodLevel[]'>
     
 
+
+/**
+ * Reference to a field of type 'LifeCoinItemType'
+ */
+export type EnumLifeCoinItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LifeCoinItemType'>
+    
+
+
+/**
+ * Reference to a field of type 'LifeCoinItemType[]'
+ */
+export type ListEnumLifeCoinItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LifeCoinItemType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -3490,6 +3684,8 @@ export type GlobalOmitConfig = {
   gameScore?: Prisma.GameScoreOmit
   dailyChallenge?: Prisma.DailyChallengeOmit
   lifeCoinTransaction?: Prisma.LifeCoinTransactionOmit
+  shopItem?: Prisma.ShopItemOmit
+  userInventory?: Prisma.UserInventoryOmit
   rewardClaim?: Prisma.RewardClaimOmit
   sharedMaterial?: Prisma.SharedMaterialOmit
 }

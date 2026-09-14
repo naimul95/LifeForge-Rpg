@@ -70,6 +70,20 @@ export const HabitLogStatus = {
 export type HabitLogStatus = (typeof HabitLogStatus)[keyof typeof HabitLogStatus]
 
 
+export const LifeCoinItemType = {
+  AVATAR: 'AVATAR',
+  FRAME: 'FRAME',
+  EFFECT: 'EFFECT',
+  BADGE: 'BADGE',
+  STREAK_EFFECT: 'STREAK_EFFECT',
+  ACHIEVEMENT_DECORATION: 'ACHIEVEMENT_DECORATION',
+  PROFILE_THEME: 'PROFILE_THEME',
+  SPECIAL: 'SPECIAL'
+} as const
+
+export type LifeCoinItemType = (typeof LifeCoinItemType)[keyof typeof LifeCoinItemType]
+
+
 export const GoalStatus = {
   NOT_STARTED: 'NOT_STARTED',
   IN_PROGRESS: 'IN_PROGRESS',

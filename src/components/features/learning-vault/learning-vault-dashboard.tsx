@@ -183,7 +183,7 @@ export function LearningVaultDashboard({
             type="button"
             onClick={() => setCreateMenuOpen((open) => !open)}
           >
-            <Plus size={15} /> Create
+            <Plus size={15} /> Create Subject
           </button>
           {createMenuOpen && (
             <div className="popover right-0 top-12 z-20 w-48">
@@ -192,14 +192,7 @@ export function LearningVaultDashboard({
                 type="button"
                 onClick={() => openDialog("subject-create")}
               >
-                <BookOpen size={14} /> Subject
-              </button>
-              <button
-                className="popover-action"
-                type="button"
-                onClick={() => openDialog("topic-create")}
-              >
-                <Plus size={14} /> Topic
+                <BookOpen size={14} /> Create Subject
               </button>
             </div>
           )}
@@ -295,6 +288,9 @@ export function LearningVaultDashboard({
                 </div>
                 <label className="field-label min-w-56">
                   Topic
+                  <button type="button" className="primary-button mt-2 w-full justify-center" onClick={() => openDialog("topic-create")}>
+                    <Plus size={14} /> Create Topic
+                  </button>
                   <select
                     className="vault-input mt-2"
                     value={topic?.id ?? ""}

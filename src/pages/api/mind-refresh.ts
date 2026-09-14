@@ -4,8 +4,12 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { sessionFromCookieHeader } from "@/lib/auth/session";
 
-const gameKeys = ["memory-match", "reaction-test", "number-challenge", "quick-math", "typing-challenge", "focus-challenge", "daily-challenge"] as const;
-const scoreInput = z.object({ gameKey: z.enum(gameKeys), score: z.number().int().min(0).max(1_000_000) });
+const gameKeys = ["reaction-test", "memorize-number", "typing-challenge", "focus-challenge", "daily-challenge"] as const;
+const scoreInput = z.object({ gameKey: z.enum(gameKeys), score: z.number().int().nonnegative() }).superRefine((value, context) => {
+  const maximum = value.gameKey === "reaction-test" ? 1000 : value.gameKey === "memorize-number" ? 1000000 : 100;
+  if (value.score > maximum) context.addIssue({ code: z.ZodIssueCode.too_big, origin: "number", maximum, inclusive: true, message: "Score is outside the valid range." });
+  if (value.gameKey === "focus-challenge") context.addIssue({ code: z.ZodIssueCode.custom, message: "This activity does not record a score." });
+});
 
 export default async function mindRefresh(request: NextApiRequest, response: NextApiResponse) {
   try {
