@@ -28,8 +28,9 @@ async function createImage(src: string) {
 async function getCroppedImageBlob(imageSrc: string, pixelCrop: Area, fileType: string, quality = 0.92) {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, pixelCrop.width);
-  canvas.height = Math.max(1, pixelCrop.height);
+  const scale = Math.min(1, 1024 / Math.max(pixelCrop.width, pixelCrop.height));
+  canvas.width = Math.max(1, Math.round(pixelCrop.width * scale));
+  canvas.height = Math.max(1, Math.round(pixelCrop.height * scale));
 
   const context = canvas.getContext("2d");
   if (!context) {
@@ -44,8 +45,8 @@ async function getCroppedImageBlob(imageSrc: string, pixelCrop: Area, fileType: 
     pixelCrop.height,
     0,
     0,
-    pixelCrop.width,
-    pixelCrop.height,
+    canvas.width,
+    canvas.height,
   );
 
   const outputType = getOutputType(fileType);
@@ -221,8 +222,10 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
     const file = event.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {
-      setError("Please upload a JPEG, PNG, GIF, or WebP image.");
+    const declaredType = file.type.toLowerCase().split(";")[0].trim();
+    const supportedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "image/heif"];
+    if (declaredType === "image/svg+xml" || (declaredType && !supportedTypes.includes(declaredType))) {
+      setError("Unsupported image format. Please use JPG, PNG, WEBP, GIF, HEIC, or HEIF.");
       event.target.value = "";
       return;
     }
@@ -316,7 +319,7 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
                 )}
               </div>
 
-              <label className="icon-button absolute -bottom-2 -right-2 bg-slate-900 text-cyan-300" title="Upload profile picture">
+              <label className="icon-button absolute -bottom-2 -right-2 bg-slate-900 text-cyan-300" title="Upload profile picture (JPG, PNG, WEBP, GIF, HEIC, or HEIF; max 5 MB)">
                 <Camera size={15} />
                 <input className="sr-only" type="file" accept="image/*" onChange={handleAvatarSelection} disabled={busy} />
               </label>
@@ -326,6 +329,7 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
               <p className="eyebrow text-cyan-300">Level {data.profile.level}</p>
               <h2 className="mt-2 truncate text-2xl font-medium text-white">{data.profile.name}</h2>
               <p className="mt-1 truncate text-sm text-slate-400">{data.profile.email}</p>
+              <p className="mt-2 text-[10px] text-slate-600">JPG, PNG, WEBP, GIF, HEIC, or HEIF. Max 5 MB.</p>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="xp-chip"><Zap size={12} /> {data.profile.xp.toLocaleString("en-US")} XP</span>

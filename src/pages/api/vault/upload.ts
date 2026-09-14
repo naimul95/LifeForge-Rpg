@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { createUploadedMaterialForUser } from "@/actions/vault.actions";
 import { sessionFromCookieHeader } from "@/lib/auth/session";
 import { cloudinary } from "@/lib/storage/cloudinary";
+import { detectImageMimeType, getUploadType } from "@/lib/storage/image-validation";
 
 export const config = { api: { bodyParser: false } };
 const MAX_FILE_SIZE = 10_000_000;
@@ -13,15 +14,11 @@ type UploadPayload = {
   file: { name: string; type: string; buffer: Buffer };
 };
 
-function hasValidSignature(file: UploadPayload["file"]) {
+function hasValidSignature(file: UploadPayload["file"], uploadType: string) {
   const header = file.buffer.subarray(0, 12);
-  if (file.type === "application/pdf") return header.subarray(0, 5).toString() === "%PDF-";
-  if (file.type === "image/jpeg") return header[0] === 0xff && header[1] === 0xd8 && header[2] === 0xff;
-  if (file.type === "image/png") return header.toString("hex") === "89504e470d0a1a0a";
-  if (file.type === "image/gif") return header.subarray(0, 6).toString() === "GIF87a" || header.subarray(0, 6).toString() === "GIF89a";
-  if (file.type === "image/webp") return header.subarray(0, 4).toString() === "RIFF" && header.subarray(8, 12).toString() === "WEBP";
-  if (file.type.startsWith("image/")) return false;
-  if (file.type === "text/plain" || file.type === "text/csv") return true;
+  if (detectImageMimeType(file.buffer)) return true;
+  if (uploadType === "application/pdf") return header.subarray(0, 5).toString() === "%PDF-";
+  if (uploadType === "text/plain" || uploadType === "text/csv") return true;
   return header[0] === 0x50 && header[1] === 0x4b && header[2] === 0x03 && header[3] === 0x04;
 }
 
@@ -73,12 +70,14 @@ export default async function upload(request: NextApiRequest, response: NextApiR
     if (!fields.topicId) throw new Error("A topic is required.");
     const requestedFileKind = fields.fileKind;
     const documentTypes = new Set(["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/plain", "text/csv"]);
-    if (!hasValidSignature(file)) throw new Error("The uploaded file type does not match its contents.");
-    const fileKind = file.type === "application/pdf" ? "pdf" : file.type.startsWith("image/") && requestedFileKind === "handwritten_note" ? "handwritten_note" : file.type.startsWith("image/") ? "image" : documentTypes.has(file.type) ? "document" : null;
+    const uploadType = getUploadType(file.type, file.buffer);
+    if (!hasValidSignature(file, uploadType)) throw new Error("The uploaded file type does not match its contents.");
+    if (uploadType.startsWith("image/") && !detectImageMimeType(file.buffer)) throw new Error("Unsupported image format. Please use JPG, PNG, WEBP, GIF, HEIC, or HEIF.");
+    const fileKind = uploadType === "application/pdf" ? "pdf" : uploadType.startsWith("image/") && requestedFileKind === "handwritten_note" ? "handwritten_note" : uploadType.startsWith("image/") ? "image" : documentTypes.has(uploadType) ? "document" : null;
     if (!fileKind) throw new Error("Only images, PDFs, and common document files are supported.");
     const uploaded = await uploadBuffer(file.buffer, userId, file.name);
     try {
-      const material = await createUploadedMaterialForUser(userId, { topicId: fields.topicId, title: fields.title || file.name, description: fields.description || "", fileKind, fileName: file.name, mimeType: file.type, sizeBytes: file.buffer.length, cloudinaryPublicId: uploaded.publicId, cloudinaryUrl: uploaded.secureUrl, cloudinaryResourceType: uploaded.resourceType });
+      const material = await createUploadedMaterialForUser(userId, { topicId: fields.topicId, title: fields.title || file.name, description: fields.description || "", fileKind, fileName: file.name, mimeType: uploadType, sizeBytes: file.buffer.length, cloudinaryPublicId: uploaded.publicId, cloudinaryUrl: uploaded.secureUrl, cloudinaryResourceType: uploaded.resourceType });
       response.status(201).json({ ok: true, material });
       return;
     } catch (error) {

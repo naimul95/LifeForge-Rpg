@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { updateProfileAvatarForUser } from "@/actions/profile.actions";
 import { sessionFromCookieHeader } from "@/lib/auth/session";
 import { cloudinary } from "@/lib/storage/cloudinary";
+import { detectImageMimeType } from "@/lib/storage/image-validation";
 
 export const config = { api: { bodyParser: false } };
 const MAX_FILE_SIZE = 5_000_000;
@@ -14,7 +15,6 @@ function parseAvatar(request: NextApiRequest) {
     parser.on("file", (field, stream, info) => { if (field !== "avatar") { stream.resume(); return; } const chunks: Buffer[] = []; stream.on("data", (chunk: Buffer) => chunks.push(chunk)); stream.on("limit", () => { rejected = true; reject(new Error("Profile images must be 5 MB or smaller.")); }); stream.on("end", () => { if (!rejected) value = { name: info.filename, type: info.mimeType, buffer: Buffer.concat(chunks) }; }); }); parser.on("error", reject); parser.on("finish", () => { if (!rejected && value) resolve(value); else if (!rejected) reject(new Error("An avatar image is required.")); }); request.pipe(parser);
   });
 }
-function hasImageSignature(file: { type: string; buffer: Buffer }) { const header = file.buffer.subarray(0, 12); return file.type === "image/jpeg" ? header[0] === 0xff && header[1] === 0xd8 && header[2] === 0xff : file.type === "image/png" ? header.toString("hex") === "89504e470d0a1a0a" : file.type === "image/gif" ? header.subarray(0, 6).toString() === "GIF87a" || header.subarray(0, 6).toString() === "GIF89a" : file.type === "image/webp" && header.subarray(0, 4).toString() === "RIFF" && header.subarray(8, 12).toString() === "WEBP"; }
 function uploadAvatar(buffer: Buffer, userId: string, name: string) { return new Promise<{ publicId: string; secureUrl: string }>((resolve, reject) => { const stream = cloudinary.uploader.upload_stream({ folder: `lifeforge/avatars/${userId}`, type: "authenticated", resource_type: "image", transformation: [{ width: 512, height: 512, crop: "fill", gravity: "face" }], context: { original_name: name } }, (error, result) => { if (error || !result) reject(error ?? new Error("Cloudinary avatar upload failed.")); else resolve({ publicId: result.public_id, secureUrl: result.secure_url }); }); stream.end(buffer); }); }
 
 export default async function avatar(request: NextApiRequest, response: NextApiResponse) {
@@ -24,7 +24,7 @@ export default async function avatar(request: NextApiRequest, response: NextApiR
     if (!session) throw new Error("Unauthorized.");
     const userId = session.userId;
     const file = await parseAvatar(request);
-    if (!hasImageSignature(file)) throw new Error("Profile pictures must be JPEG, PNG, GIF, or WebP images.");
+    if (!detectImageMimeType(file.buffer)) throw new Error("Unsupported image format. Please use JPG, PNG, WEBP, GIF, HEIC, or HEIF.");
     const uploaded = await uploadAvatar(file.buffer, userId, file.name);
     try {
       const previousId = await updateProfileAvatarForUser(userId, uploaded);

@@ -840,6 +840,7 @@ function MaterialComposer({
               onChange={(event) => setFile(event.target.files?.[0] ?? null)}
               required
             />
+            <span className="mt-1 block text-[10px] text-slate-600">Images: JPG, PNG, WEBP, GIF, HEIC, or HEIF. Maximum 10 MB.</span>
           </label>
         </div>
       ) : kind === "note" ? (
