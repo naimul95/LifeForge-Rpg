@@ -9,6 +9,15 @@ export const SUPPORTED_IMAGE_MIME_TYPES = [
 
 export type SupportedImageMimeType = (typeof SUPPORTED_IMAGE_MIME_TYPES)[number];
 
+export const PROFILE_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+] as const;
+
+export type ProfileImageMimeType = (typeof PROFILE_IMAGE_MIME_TYPES)[number];
+
 function startsWith(buffer: Buffer, value: string, offset = 0) {
   return buffer.subarray(offset, offset + value.length).toString() === value;
 }
@@ -27,6 +36,13 @@ export function detectImageMimeType(buffer: Buffer): SupportedImageMimeType | nu
   }
 
   return null;
+}
+
+export function detectProfileImageMimeType(buffer: Buffer): ProfileImageMimeType | null {
+  const detected = detectImageMimeType(buffer);
+  return detected && PROFILE_IMAGE_MIME_TYPES.includes(detected as ProfileImageMimeType)
+    ? (detected as ProfileImageMimeType)
+    : null;
 }
 
 export function getUploadType(declaredType: string, buffer: Buffer) {

@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { updateProfileAvatarForUser } from "@/actions/profile.actions";
 import { sessionFromCookieHeader } from "@/lib/auth/session";
 import { cloudinary } from "@/lib/storage/cloudinary";
-import { detectImageMimeType } from "@/lib/storage/image-validation";
+import { detectProfileImageMimeType } from "@/lib/storage/image-validation";
 
 export const config = { api: { bodyParser: false } };
 const MAX_FILE_SIZE = 5_000_000;
@@ -24,7 +24,7 @@ export default async function avatar(request: NextApiRequest, response: NextApiR
     if (!session) throw new Error("Unauthorized.");
     const userId = session.userId;
     const file = await parseAvatar(request);
-    if (!detectImageMimeType(file.buffer)) throw new Error("Unsupported image format. Please use JPG, PNG, WEBP, GIF, HEIC, or HEIF.");
+    if (!detectProfileImageMimeType(file.buffer)) throw new Error("Please select a JPG, JPEG, PNG, WEBP, or GIF image.");
     const uploaded = await uploadAvatar(file.buffer, userId, file.name);
     try {
       const previousId = await updateProfileAvatarForUser(userId, uploaded);
@@ -35,6 +35,12 @@ export default async function avatar(request: NextApiRequest, response: NextApiR
     }
     response.status(201).json({ ok: true });
   } catch (error) {
-    response.status(400).json({ error: error instanceof Error ? error.message : "Avatar upload failed." });
+    const message = error instanceof Error ? error.message : "";
+    const userMessage = message === "Please select a JPG, JPEG, PNG, WEBP, or GIF image."
+      ? message
+      : message === "Profile images must be 5 MB or smaller."
+        ? message
+        : "Profile picture upload failed. Please try again.";
+    response.status(400).json({ error: userMessage });
   }
 }

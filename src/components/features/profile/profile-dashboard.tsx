@@ -8,12 +8,20 @@ import { Award, Camera, Check, Flame, Medal, RotateCcw, Save, Trophy, UserRound,
 import { getProfileDashboardData, updateProfile } from "@/actions/profile.actions";
 import type { ProfileDashboardData } from "@/types/profile-dashboard";
 
+/* The crop preview uses a local blob URL, which must bypass Next image URL parsing. */
+/* eslint-disable @next/next/no-img-element */
+
 const MAX_IMAGE_SIZE = 5_000_000;
 
 function getOutputType(fileType: string) {
-  if (fileType === "image/png") return "image/png";
-  if (fileType === "image/webp") return "image/webp";
+  const normalizedType = fileType.toLowerCase().split(";")[0].trim();
+  if (normalizedType === "image/png") return "image/png";
+  if (normalizedType === "image/webp") return "image/webp";
   return "image/jpeg";
+}
+
+function getOutputExtension(outputType: string) {
+  return outputType === "image/png" ? "png" : outputType === "image/webp" ? "webp" : "jpg";
 }
 
 async function createImage(src: string) {
@@ -223,9 +231,9 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
     if (!file) return;
 
     const declaredType = file.type.toLowerCase().split(";")[0].trim();
-    const supportedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "image/heif"];
-    if (declaredType === "image/svg+xml" || (declaredType && !supportedTypes.includes(declaredType))) {
-      setError("Unsupported image format. Please use JPG, PNG, WEBP, GIF, HEIC, or HEIF.");
+    const supportedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (declaredType === "image/svg+xml" || (declaredType.startsWith("image/") && !supportedTypes.includes(declaredType))) {
+      setError("Please select a JPG, JPEG, PNG, WEBP, or GIF image.");
       event.target.value = "";
       return;
     }
@@ -274,8 +282,9 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
     try {
       const blob = await getCroppedImageBlob(imageSrc, cropArea, selectedFile.type || "image/jpeg", 0.92);
       const baseName = (selectedFile.name || "profile-picture").replace(/\.[^/.]+$/, "") || "profile-picture";
-      const outputFile = new File([blob], `${baseName}.jpg`, {
-        type: getOutputType(selectedFile.type || "image/jpeg"),
+      const outputType = blob.type || getOutputType(selectedFile.type || "image/jpeg");
+      const outputFile = new File([blob], `${baseName}.${getOutputExtension(outputType)}`, {
+        type: outputType,
       });
 
       closeCropEditor();
@@ -321,7 +330,7 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
 
               <label className="icon-button absolute -bottom-2 -right-2 bg-slate-900 text-cyan-300" title="Upload profile picture (JPG, PNG, WEBP, GIF, HEIC, or HEIF; max 5 MB)">
                 <Camera size={15} />
-                <input className="sr-only" type="file" accept="image/*" onChange={handleAvatarSelection} disabled={busy} />
+                <input className="sr-only" type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleAvatarSelection} disabled={busy} />
               </label>
             </div>
 
@@ -449,12 +458,11 @@ export function ProfileDashboard({ initialData }: { initialData: ProfileDashboar
               <div className="flex flex-col gap-4">
                 <div className="mx-auto flex size-36 items-center justify-center overflow-hidden rounded-full border border-cyan-400/30 bg-slate-950">
                   {previewUrl ? (
-                    <Image
+                    <img
                       src={previewUrl}
                       alt="Avatar crop preview"
                       width={140}
                       height={140}
-                      unoptimized
                       className="h-full w-full object-cover"
                     />
                   ) : (
