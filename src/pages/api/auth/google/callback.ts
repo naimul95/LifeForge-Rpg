@@ -15,12 +15,12 @@ export default async function googleCallback(request: NextApiRequest, response: 
   const [{ passport }, { createSessionToken, sessionCookieHeader }, { env }] = await Promise.all([import("@/lib/server/auth/passport"), import("@/lib/auth/session"), import("@/lib/env")]);
   return passport.authenticate("google", { session: false }, async (error: unknown, user: AuthenticatedUser | false) => {
     if (error || !user) {
-      response.redirect(302, `${env.NEXT_PUBLIC_APP_URL}/?auth=failed`);
+      response.redirect(302, `${env.APP_URL}/?auth=failed`);
       return;
     }
 
     const token = await createSessionToken(user.id);
     response.setHeader("Set-Cookie", ["lifeforge_oauth_state=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0", sessionCookieHeader(token)]);
-    response.redirect(302, env.NEXT_PUBLIC_APP_URL);
+    response.redirect(302, env.APP_URL);
   })(request, response);
 }

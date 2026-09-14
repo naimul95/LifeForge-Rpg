@@ -8,7 +8,7 @@ const serverEnvSchema = z.object({
   CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME is required."),
   CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY is required."),
   CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET is required."),
-  NEXT_PUBLIC_APP_URL: z.string().url("NEXT_PUBLIC_APP_URL must be a valid URL."),
+  APP_URL: z.string().url("APP_URL must be a valid URL."),
 });
 
 const parsedEnv = serverEnvSchema.safeParse({
@@ -19,7 +19,7 @@ const parsedEnv = serverEnvSchema.safeParse({
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
-  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  APP_URL: process.env.APP_URL,
 });
 
 if (!parsedEnv.success) {

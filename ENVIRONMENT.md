@@ -22,12 +22,12 @@ The checked-in `.env.example` intentionally contains no credentials or connectio
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary Console, Product Environment details | Selects the Cloudinary account |
 | `CLOUDINARY_API_KEY` | Cloudinary Console, Product Environment, API Keys | Server-side Cloudinary API authentication |
 | `CLOUDINARY_API_SECRET` | Cloudinary Console, Product Environment, API Keys | Signs Cloudinary operations; server-only |
-| `NEXT_PUBLIC_APP_URL` | The deployed application origin, or `http://localhost:3000` locally | Public OAuth callback and browser origin configuration |
+| `APP_URL` | The deployed application origin, or `http://localhost:3000` locally | Server-side OAuth callback and browser origin configuration |
 
 ## Production
 
 Add these values to the Vercel project under **Settings -> Environment Variables**, separately for Preview and Production where appropriate. Vercel injects them at runtime; do not put production secrets in the repository or source code.
 
-Only `NEXT_PUBLIC_APP_URL` is intentionally browser-visible. All other variables are server secrets or server connection settings and must be accessed only through the server-only environment module. Never rename a secret with a `NEXT_PUBLIC_` prefix.
+`APP_URL` is server-only. All variables are server secrets or server connection settings and must be accessed only through the server-only environment module. Never rename a secret with a `NEXT_PUBLIC_` prefix.
 
 For Google OAuth, register the matching production callback URL in Google Cloud Console. For Neon and Cloudinary, use the credentials from the project/account that belongs to the target deployment environment.

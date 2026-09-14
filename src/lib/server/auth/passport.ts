@@ -20,7 +20,7 @@ async function findOrCreateUser(profile: Profile): Promise<AuthenticatedUser> {
   return { id: user.id, email: user.email, displayName: user.displayName, avatarUrl: user.avatarUrl };
 }
 
-const callbackURL = new URL("/api/auth/google/callback", env.NEXT_PUBLIC_APP_URL).toString();
+const callbackURL = new URL("/api/auth/google/callback", env.APP_URL).toString();
 const strategy = new GoogleStrategy({ clientID: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET, callbackURL }, async (_accessToken, _refreshToken, profile, done) => {
   try { done(null, await findOrCreateUser(profile)); } catch (error) { done(error as Error); }
 });

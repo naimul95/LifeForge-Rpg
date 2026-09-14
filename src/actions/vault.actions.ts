@@ -230,5 +230,5 @@ export async function shareMaterial(materialId: string) {
   if (!material) throw new Error("Material not found.");
   const share = await prisma.sharedMaterial.upsert({ where: { userId_materialId: { userId, materialId } }, update: { revokedAt: null }, create: { userId, materialId, shareToken: crypto.randomUUID() } });
   revalidatePath("/dashboard/learning-vault");
-  return `${env.NEXT_PUBLIC_APP_URL}/shared/${share.shareToken}`;
+  return `${env.APP_URL}/shared/${share.shareToken}`;
 }
