@@ -5,7 +5,9 @@ import { parseCookie, stringifySetCookie } from "cookie";
 import { env } from "@/lib/env";
 
 export const SESSION_COOKIE = "lifeforge_session";
+export const OAUTH_STATE_COOKIE = "lifeforge_oauth_state";
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7;
+const OAUTH_STATE_TTL_SECONDS = 60 * 10;
 const jwtKey = new TextEncoder().encode(env.JWT_SECRET);
 
 export type Session = { userId: string };
@@ -45,6 +47,34 @@ export function sessionCookieHeader(token: string) {
     sameSite: "lax",
     path: "/",
     maxAge: SESSION_TTL_SECONDS,
+  });
+}
+
+export function oauthStateCookieHeader(state: string) {
+  const isSecure = env.APP_URL.startsWith("https://");
+
+  return stringifySetCookie({
+    name: OAUTH_STATE_COOKIE,
+    value: state,
+    httpOnly: true,
+    secure: isSecure,
+    sameSite: isSecure ? "none" : "lax",
+    path: "/",
+    maxAge: OAUTH_STATE_TTL_SECONDS,
+  });
+}
+
+export function clearedOAuthStateCookieHeader() {
+  const isSecure = env.APP_URL.startsWith("https://");
+
+  return stringifySetCookie({
+    name: OAUTH_STATE_COOKIE,
+    value: "",
+    httpOnly: true,
+    secure: isSecure,
+    sameSite: isSecure ? "none" : "lax",
+    path: "/",
+    maxAge: 0,
   });
 }
 
